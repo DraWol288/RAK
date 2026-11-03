@@ -313,7 +313,7 @@ function generateReplyText() {
     const form = document.createElement('form');
     form.method = 'POST';
     // ⚠️ ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ ШАГА 1:
-    form.action = 'https://formspree.io/f/ВАШ_КОД'; 
+    form.action = 'https://formspree.io/f/myeelzqp'; 
     form.style.display = 'none'; 
     
     const addField = (name, value) => {
