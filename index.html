@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Zodiac: Happy New Year, Sasha!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="snow-container"></div>
+
+    <div class="container">
+        <h1>С Новым Годом, Саша!</h1>
+        <div class="subtitle">// ZODIAC: TAURUS // 402 PCS //</div>
+
+        <section>
+            <h2>🎄 Виртуальная Ёлка</h2>
+            <p>Нажми на светящиеся шары, чтобы получить послание.</p>
+            <div class="tree-container" id="tree"></div>
+        </section>
+
+        <section>
+            <h2>🎟️ Скретч-карты</h2>
+            <p>Сотри защитный слой мышкой (или пальцем), чтобы узнать предсказание!</p>
+            <div class="scratch-container" id="scratch-container"></div>
+        </section>
+
+        <section>
+            <h2>🎯 Бинго Новогодних Обещаний</h2>
+            <p>Кликай по клеткам, которые ты обещаешь выполнить. Собери линию!</p>
+            <div class="bingo-grid" id="bingo-grid"></div>
+            <div id="bingo-result" class="result-box"></div>
+        </section>
+
+        <section>
+            <h2>🔮 Предсказание на год</h2>
+            <p>Нажми на кнопку, чтобы узнать, что тебя ждёт в новом году.</p>
+            <button class="btn" onclick="generatePrediction()">Узнать, что тебя ждёт!</button>
+            <div id="prediction-result" class="result-box"></div>
+        </section>
+
+        <section>
+            <h2>🎉 Новогоднее Бинго</h2>
+            <p>Отметь, что уже случилось с тобой в этом году:</p>
+            <div class="holiday-bingo" id="holiday-bingo"></div>
+        </section>
+
+        <section>
+            <h2>🍿 Идеальный зимний вечер</h2>
+            <p>Не знаешь, чем заняться? Нажми на кнопку!</p>
+            <button class="btn" onclick="generateEvening()">Сгенерировать вечер</button>
+            <div id="evening-result" class="result-box"></div>
+        </section>
+
+        <!-- БЛОК: ЛИЧНОЕ ПОЗДРАВЛЕНИЕ И ФОРМА ОТВЕТА -->
+        <section>
+            <h2>💌 Личное поздравление</h2>
+            
+            <!-- Твой текст -->
+            <div class="personal-message-display">
+<!-- ВПИШИ СЮДА СВОЙ ТЕКСТ -->
+Дорогой Саша! 
+Поздравляю тебя с Новым годом! Желаю тебе в новом году побольше крутых идей, успешных проектов и, конечно же, счастья. Пусть каждый день приносит что-то новое и интересное. Спасибо, что ты мой одногруппник, с тобой всегда весело!
+            </div>
+
+            <p style="margin-bottom: 20px;">А теперь твой ход! Напиши мне ответ:</p>
+            
+            <!-- Форма для ответа -->
+            <div class="reply-form">
+                <input type="text" id="senderName" placeholder="Твое имя (например, Саша)">
+                <textarea id="replyMessage" placeholder="Твой ответ или пожелание..."></textarea>
+                <button class="btn" onclick="generateReplyText()">Сформировать ответ</button>
+                <div class="copy-success-msg" id="copyMsg">Готово! Текст скопирован.</div>
+            </div>
+
+            <!-- Текстовое поле для результата, которое можно скопировать -->
+            <div id="replyResultContainer" style="display: none; margin-top: 20px;">
+                <p style="color: var(--neon-amber);">Скопируй этот текст и отправь его мне:</p>
+                <div class="personal-message-display" id="replyResultText" style="user-select: all; cursor: text;"></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3 id="modal-title">Поздравление!</h3>
+            <p id="modal-text"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
