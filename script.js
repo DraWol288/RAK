@@ -316,9 +316,26 @@ function generateReplyText() {
     addField('_next', window.location.href); 
     
     document.body.appendChild(form);
+    if(confirm("Текст скопирован! Сейчас откроется окно подтверждения отправки. Нажми OK, чтобы отправить.")) {
+        form.submit(); 
+    } else {
+        // Если пользователь нажал "Отмена"
+        document.body.removeChild(form);
+    }
     form.submit(); // Отправляем
     document.body.removeChild(form); // Удаляем форму
     
     // Очищаем поля ввода
     nameInput.value = '';
     messageInput.value = '';
+    
+// --- 9. Привязка кнопки к функции ---
+document.addEventListener('DOMContentLoaded', () => {
+    const replyBtn = document.querySelector('.reply-form button'); // Ищем кнопку внутри формы
+    if (replyBtn) {
+        replyBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Предотвращаем перезагрузку страницы
+            generateReplyText();
+        });
+    }
+});
