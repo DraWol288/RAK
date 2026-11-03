@@ -275,7 +275,7 @@ function generateEvening() {
     document.getElementById('evening-result').innerText = `Сегодня твой идеальный вечер: фильм ${movie}, напиток "${drink}", активность "${activity}".`;
 }
 
-// --- 8. Логика для формы ответа ---
+// --- 8. Логика для формы ответа (Formspree Edition) ---
 function generateReplyText() {
     const nameInput = document.getElementById('senderName');
     const messageInput = document.getElementById('replyMessage');
@@ -292,14 +292,13 @@ function generateReplyText() {
         return;
     }
     
-    // Формируем красивый текст
+    // Формируем текст
     const finalText = `Привет! Меня зовут ${name}.\n\nМой ответ на твое поздравление:\n"${message}"\n\nС Новым Годом! 🎄`;
     
-    // Показываем результат
+    // Показываем результат и копируем
     resultText.innerText = finalText;
     resultContainer.style.display = 'block';
     
-    // Копируем в буфер обмена
     navigator.clipboard.writeText(finalText).then(() => {
         copyMsg.style.display = 'block';
         copyMsg.innerText = '✅ Готово! Текст скопирован!';
@@ -310,11 +309,11 @@ function generateReplyText() {
         copyMsg.innerText = '⚠️ Скопируй текст вручную!';
     });
 
-    // ОТПРАВКА ДАННЫХ (Обход CORS через скрытую форму)
+    // ОТПРАВКА ЧЕРЕЗ FORMSPREE (скрытая форма)
     const form = document.createElement('form');
     form.method = 'POST';
-    // ВАЖНО: Убедитесь, что email написан верно
-    form.action = 'https://formsubmit.io/ulya.makhneva.08@mail.ru'; 
+    // ⚠️ ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ ШАГА 1:
+    form.action = 'https://formspree.io/f/ВАШ_КОД'; 
     form.style.display = 'none'; 
     
     const addField = (name, value) => {
@@ -327,15 +326,14 @@ function generateReplyText() {
 
     addField('Имя', name);
     addField('Сообщение', message);
-    addField('_subject', 'Новый ответ с новогоднего сайта! 🎄');
-    addField('_template', 'table');
-    addField('_next', window.location.href); 
+    // Для Formspree тема письма задается полем _subject
+    addField('_subject', 'Новый ответ с новогоднего сайта! 🎄'); 
     
     document.body.appendChild(form);
     form.submit(); 
     document.body.removeChild(form); 
     
-    // Очищаем поля ввода
+    // Очищаем поля
     nameInput.value = '';
     messageInput.value = '';
 }
