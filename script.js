@@ -278,8 +278,11 @@ document.getElementById('replyForm').addEventListener('submit', function(e) {
   // Формируем красивый текст для копирования
   const finalText = `Привет! Меня зовут ${name}.\n\nМой ответ на твое поздравление:\n"${message}"\n\nС Новым Годом! 🎄`;
   
+  // ВАЖНО: Замените YOUR_EMAIL@gmail.com на ваш реальный email
+  const formSubmitUrl = 'https://formsubmit.io/ajax/ulya.makhneva.08@mail.ru';
+  
   // Отправляем данные на FormSubmit
-  fetch('https://formsubmit.io/ajax/ulya.makhneva.08@mail.cru', {
+  fetch(formSubmitUrl, {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',
@@ -291,40 +294,38 @@ document.getElementById('replyForm').addEventListener('submit', function(e) {
       _subject: 'Новый ответ с новогоднего сайта! 🎄'
     })
   })
-  .then(response => response.json())
+  .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+  })
   .then(data => {
-    // Показываем результат
-    resultText.innerText = finalText;
-    resultContainer.style.display = 'block';
-    copyMsg.style.display = 'block';
-    copyMsg.innerText = '✅ Готово! Текст скопирован и отправлен мне!';
-    
-    // Копируем в буфер обмена
-    navigator.clipboard.writeText(finalText).then(() => {
-      setTimeout(() => {
-        copyMsg.style.display = 'none';
-      }, 3000);
-    }).catch(err => {
-      console.error('Ошибка копирования: ', err);
-      alert('Текст отправлен мне, но скопировать не удалось. Выдели его вручную.');
-    });
-    
-    // Очищаем форму
-    document.getElementById('replyForm').reset();
-    submitBtn.disabled = false;
-    submitBtn.innerText = 'СФОРМИРОВАТЬ ОТВЕТ';
+    // Успешная отправка
+    showSuccess(finalText, '✅ Готово! Текст скопирован и отправлен мне!');
   })
   .catch(error => {
     console.error('Ошибка отправки: ', error);
-    alert('Не удалось отправить ответ. Попробуй скопировать текст вручную.');
-    
-    // Даже если отправка не удалась, показываем текст для копирования
-    resultText.innerText = finalText;
-    resultContainer.style.display = 'block';
-    copyMsg.style.display = 'block';
-    copyMsg.innerText = '⚠️ Отправка не удалась. Скопируй текст вручную!';
-    
+    // Даже если отправка не удалась, показываем текст для ручного копирования
+    showSuccess(finalText, '⚠️ Отправка не удалась. Скопируй текст вручную!');
+  })
+  .finally(() => {
     submitBtn.disabled = false;
     submitBtn.innerText = 'СФОРМИРОВАТЬ ОТВЕТ';
   });
+
+  function showSuccess(text, msg) {
+      resultText.innerText = text;
+      resultContainer.style.display = 'block';
+      copyMsg.style.display = 'block';
+      copyMsg.innerText = msg;
+      
+      // Копируем в буфер обмена
+      navigator.clipboard.writeText(text).then(() => {
+        setTimeout(() => { copyMsg.style.display = 'none'; }, 3000);
+      }).catch(err => {
+        console.error('Ошибка копирования: ', err);
+      });
+      
+      // Очищаем форму
+      document.getElementById('replyForm').reset();
+  }
 });
