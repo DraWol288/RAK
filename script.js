@@ -322,5 +322,4 @@ function generateReplyText() {
     // Очищаем поля ввода
     nameInput.value = '';
     messageInput.value = '';
-}
 });
