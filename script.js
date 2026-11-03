@@ -255,77 +255,72 @@ function generateEvening() {
     document.getElementById('evening-result').innerText = `Сегодня твой идеальный вечер: фильм ${movie}, напиток "${drink}", активность "${activity}".`;
 }
 
-// --- 8. Логика для формы ответа с FormSubmit ---
-document.getElementById('replyForm').addEventListener('submit', function(e) {
-  e.preventDefault(); // Предотвращаем стандартную отправку формы
-  
-  const name = document.getElementById('senderName').value.trim();
-  const message = document.getElementById('replyMessage').value.trim();
-  const resultContainer = document.getElementById('replyResultContainer');
-  const resultText = document.getElementById('replyResultText');
-  const copyMsg = document.getElementById('copyMsg');
-  const submitBtn = this.querySelector('button[type="submit"]');
-  
-  if (!name || !message) {
-    alert("Пожалуйста, заполни имя и сообщение!");
-    return;
-  }
-  
-  // Блокируем кнопку на время отправки
-  submitBtn.disabled = true;
-  submitBtn.innerText = 'ОТПРАВКА...';
-  
-  // Формируем красивый текст для копирования
-  const finalText = `Привет! Меня зовут ${name}.\n\nМой ответ на твое поздравление:\n"${message}"\n\nС Новым Годом! 🎄`;
-  
-  // ВАЖНО: Замените YOUR_EMAIL@gmail.com на ваш реальный email
-  const formSubmitUrl = 'https://formsubmit.co/ulya.makhneva.08@mail.ru';
-  
-  // Отправляем данные на FormSubmit
-  fetch(formSubmitUrl, {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify({
-      name: name,
-      message: message,
-      _subject: 'Новый ответ с новогоднего сайта! 🎄'
-    })
-  })
-  .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.json();
-  })
-  .then(data => {
-    // Успешная отправка
-    showSuccess(finalText, '✅ Готово! Текст скопирован и отправлен мне!');
-  })
-  .catch(error => {
-    console.error('Ошибка отправки: ', error);
-    // Даже если отправка не удалась, показываем текст для ручного копирования
-    showSuccess(finalText, '⚠️ Отправка не удалась. Скопируй текст вручную!');
-  })
-  .finally(() => {
-    submitBtn.disabled = false;
-    submitBtn.innerText = 'СФОРМИРОВАТЬ ОТВЕТ';
-  });
-
-  function showSuccess(text, msg) {
-      resultText.innerText = text;
-      resultContainer.style.display = 'block';
-      copyMsg.style.display = 'block';
-      copyMsg.innerText = msg;
-      
-      // Копируем в буфер обмена
-      navigator.clipboard.writeText(text).then(() => {
+// --- 8. Логика для формы ответа (Исправлено CORS) ---
+function generateReplyText() {
+    const nameInput = document.getElementById('senderName');
+    const messageInput = document.getElementById('replyMessage');
+    
+    const name = nameInput.value.trim();
+    const message = messageInput.value.trim();
+    
+    const resultContainer = document.getElementById('replyResultContainer');
+    const resultText = document.getElementById('replyResultText');
+    const copyMsg = document.getElementById('copyMsg');
+    
+    // Проверка на пустоту
+    if (!name || !message) {
+        alert("Пожалуйста, заполни имя и сообщение!");
+        return;
+    }
+    
+    // 1. Формируем красивый текст для копирования
+    const finalText = `Привет! Меня зовут ${name}.\n\nМой ответ на твое поздравление:\n"${message}"\n\nС Новым Годом! 🎄`;
+    
+    // 2. Показываем результат пользователю
+    resultText.innerText = finalText;
+    resultContainer.style.display = 'block';
+    
+    // 3. Копируем в буфер обмена
+    navigator.clipboard.writeText(finalText).then(() => {
+        copyMsg.style.display = 'block';
+        copyMsg.innerText = '✅ Готово! Текст скопирован и отправляется...';
         setTimeout(() => { copyMsg.style.display = 'none'; }, 3000);
-      }).catch(err => {
+    }).catch(err => {
         console.error('Ошибка копирования: ', err);
-      });
-      
-      // Очищаем форму
-      document.getElementById('replyForm').reset();
-  }
+        copyMsg.style.display = 'block';
+        copyMsg.innerText = '⚠️ Скопируй текст вручную!';
+    });
+
+    // 4. ОТПРАВКА ДАННЫХ (Обход CORS через скрытую форму)
+    // Создаем форму программно
+    const form = document.createElement('form');
+    form.method = 'POST';
+    // ВАЖНО: Убедитесь, что email написан верно
+    form.action = 'https://formsubmit.co/ulya.makhneva.08@mail.ru'; 
+    form.style.display = 'none'; // Скрываем форму
+    
+    // Добавляем поля данных
+    const addField = (name, value) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+    };
+
+    addField('Имя', name);
+    addField('Сообщение', message);
+    addField('_subject', 'Новый ответ с новогоднего сайта! 🎄');
+    addField('_template', 'table');
+    // _next возвращает пользователя обратно на сайт после отправки
+    addField('_next', window.location.href); 
+    
+    document.body.appendChild(form);
+    form.submit(); // Отправляем
+    document.body.removeChild(form); // Удаляем форму
+    
+    // Очищаем поля ввода
+    nameInput.value = '';
+    messageInput.value = '';
+}
 });
