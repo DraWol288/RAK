@@ -314,7 +314,7 @@ function generateReplyText() {
     const form = document.createElement('form');
     form.method = 'POST';
     // ВАЖНО: Убедитесь, что email написан верно
-    form.action = 'https://formsubmit.co/ulya.makhneva.08@mail.ru'; 
+    form.action = 'https://formsubmit.io/ulya.makhneva.08@mail.ru'; 
     form.style.display = 'none'; 
     
     const addField = (name, value) => {
