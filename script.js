@@ -279,7 +279,7 @@ document.getElementById('replyForm').addEventListener('submit', function(e) {
   const finalText = `Привет! Меня зовут ${name}.\n\nМой ответ на твое поздравление:\n"${message}"\n\nС Новым Годом! 🎄`;
   
   // Отправляем данные на FormSubmit
-  fetch('https://formsubmit.co/ajax/YOUR_EMAIL@gmail.com', {
+  fetch('https://formsubmit.io/ajax/ulya.makhneva.08@mail.cru', {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',
