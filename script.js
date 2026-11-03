@@ -328,4 +328,3 @@ document.getElementById('replyForm').addEventListener('submit', function(e) {
     submitBtn.innerText = 'СФОРМИРОВАТЬ ОТВЕТ';
   });
 });
-}
