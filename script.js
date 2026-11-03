@@ -275,76 +275,49 @@ function generateEvening() {
     document.getElementById('evening-result').innerText = `Сегодня твой идеальный вечер: фильм ${movie}, напиток "${drink}", активность "${activity}".`;
 }
 
-// --- 8. Логика для формы ответа (Formspree Edition) ---
-function generateReplyText() {
-    const nameInput = document.getElementById('senderName');
-    const messageInput = document.getElementById('replyMessage');
+// --- 8. Отправка формы через Formspree ---
+const form = document.getElementById('replyForm');
+const successMsg = document.getElementById('successMsg');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault(); // Останавливаем стандартную перезагрузку страницы
     
-    const name = nameInput.value.trim();
-    const message = messageInput.value.trim();
+    const formData = new FormData(form);
     
-    const resultContainer = document.getElementById('replyResultContainer');
-    const resultText = document.getElementById('replyResultText');
-    const copyMsg = document.getElementById('copyMsg');
-    
-    if (!name || !message) {
-        alert("Пожалуйста, заполни имя и сообщение!");
-        return;
-    }
-    
-    // Формируем текст
-    const finalText = `Привет! Меня зовут ${name}.\n\nМой ответ на твое поздравление:\n"${message}"\n\nС Новым Годом! 🎄`;
-    
-    // Показываем результат и копируем
-    resultText.innerText = finalText;
-    resultContainer.style.display = 'block';
-    
-    navigator.clipboard.writeText(finalText).then(() => {
-        copyMsg.style.display = 'block';
-        copyMsg.innerText = '✅ Готово! Текст скопирован!';
-        setTimeout(() => { copyMsg.style.display = 'none'; }, 3000);
-    }).catch(err => {
-        console.error('Ошибка копирования: ', err);
-        copyMsg.style.display = 'block';
-        copyMsg.innerText = '⚠️ Скопируй текст вручную!';
+    // Меняем текст кнопки, чтобы показать, что идет отправка
+    const submitBtn = form.querySelector('button');
+    const originalBtnText = submitBtn.innerText;
+    submitBtn.innerText = 'ОТПРАВКА...';
+    submitBtn.disabled = true;
+
+    fetch('https://formspree.io/f/myeelzqp', { // <-- Вставь свою ссылку сюда
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Успешная отправка
+            form.style.display = 'none'; // Скрываем форму
+            successMsg.style.display = 'block'; // Показываем плашку
+        } else {
+            response.json().then(data => {
+                if (Object.hasOwn(data, 'errors')) {
+                    alert(data["errors"].map(error => error["message"]).join(", "));
+                } else {
+                    alert("Ошибка при отправке. Попробуй еще раз.");
+                }
+            });
+        }
+    })
+    .catch(error => {
+        alert("Ошибка сети. Проверь подключение к интернету.");
+    })
+    .finally(() => {
+        // Возвращаем кнопку в исходное состояние (если форма не скрылась)
+        submitBtn.innerText = originalBtnText;
+        submitBtn.disabled = false;
     });
-
-    // ОТПРАВКА ЧЕРЕЗ FORMSPREE (скрытая форма)
-    const form = document.createElement('form');
-    form.method = 'POST';
-    // ⚠️ ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ ШАГА 1:
-    form.action = 'https://formspree.io/f/myeelzqp'; 
-    form.style.display = 'none'; 
-    
-    const addField = (name, value) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        input.value = value;
-        form.appendChild(input);
-    };
-
-    addField('Имя', name);
-    addField('Сообщение', message);
-    // Для Formspree тема письма задается полем _subject
-    addField('_subject', 'Новый ответ с новогоднего сайта! 🎄'); 
-    
-    document.body.appendChild(form);
-    form.submit(); 
-    document.body.removeChild(form); 
-    
-    // Очищаем поля
-    nameInput.value = '';
-    messageInput.value = '';
-}
-
-// --- 9. Привязка кнопки к функции (ДОБАВЛЕНО) ---
-document.addEventListener('DOMContentLoaded', () => {
-    const replyBtn = document.querySelector('.reply-form button');
-    if (replyBtn) {
-        replyBtn.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            generateReplyText();
-        });
-    }
 });
