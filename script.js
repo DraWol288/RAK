@@ -255,31 +255,77 @@ function generateEvening() {
     document.getElementById('evening-result').innerText = `Сегодня твой идеальный вечер: фильм ${movie}, напиток "${drink}", активность "${activity}".`;
 }
 
-// --- 8. Логика для формы ответа ---
-function generateReplyText() {
-    const name = document.getElementById('senderName').value.trim();
-    const message = document.getElementById('replyMessage').value.trim();
-    const resultContainer = document.getElementById('replyResultContainer');
-    const resultText = document.getElementById('replyResultText');
-    const copyMsg = document.getElementById('copyMsg');
-
-    if (!name || !message) {
-        alert("Пожалуйста, заполни имя и сообщение!");
-        return;
-    }
-
-    const finalText = `Привет! Меня зовут ${name}.\n\nМой ответ на твое поздравление:\n"${message}"\n\nС Новым Годом! 🎄`;
-    
+// --- 8. Логика для формы ответа с FormSubmit ---
+document.getElementById('replyForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // Предотвращаем стандартную отправку формы
+  
+  const name = document.getElementById('senderName').value.trim();
+  const message = document.getElementById('replyMessage').value.trim();
+  const resultContainer = document.getElementById('replyResultContainer');
+  const resultText = document.getElementById('replyResultText');
+  const copyMsg = document.getElementById('copyMsg');
+  const submitBtn = this.querySelector('button[type="submit"]');
+  
+  if (!name || !message) {
+    alert("Пожалуйста, заполни имя и сообщение!");
+    return;
+  }
+  
+  // Блокируем кнопку на время отправки
+  submitBtn.disabled = true;
+  submitBtn.innerText = 'ОТПРАВКА...';
+  
+  // Формируем красивый текст для копирования
+  const finalText = `Привет! Меня зовут ${name}.\n\nМой ответ на твое поздравление:\n"${message}"\n\nС Новым Годом! 🎄`;
+  
+  // Отправляем данные на FormSubmit
+  fetch('https://formsubmit.co/ajax/YOUR_EMAIL@gmail.com', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+      name: name,
+      message: message,
+      _subject: 'Новый ответ с новогоднего сайта! 🎄'
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Показываем результат
     resultText.innerText = finalText;
     resultContainer.style.display = 'block';
+    copyMsg.style.display = 'block';
+    copyMsg.innerText = '✅ Готово! Текст скопирован и отправлен мне!';
     
+    // Копируем в буфер обмена
     navigator.clipboard.writeText(finalText).then(() => {
-        copyMsg.style.display = 'block';
-        setTimeout(() => {
-            copyMsg.style.display = 'none';
-        }, 3000);
+      setTimeout(() => {
+        copyMsg.style.display = 'none';
+      }, 3000);
     }).catch(err => {
-        console.error('Ошибка копирования: ', err);
-        alert('Текст готов, но скопировать не удалось. Выдели его и скопируй вручную.');
+      console.error('Ошибка копирования: ', err);
+      alert('Текст отправлен мне, но скопировать не удалось. Выдели его вручную.');
     });
+    
+    // Очищаем форму
+    document.getElementById('replyForm').reset();
+    submitBtn.disabled = false;
+    submitBtn.innerText = 'СФОРМИРОВАТЬ ОТВЕТ';
+  })
+  .catch(error => {
+    console.error('Ошибка отправки: ', error);
+    alert('Не удалось отправить ответ. Попробуй скопировать текст вручную.');
+    
+    // Даже если отправка не удалась, показываем текст для копирования
+    resultText.innerText = finalText;
+    resultContainer.style.display = 'block';
+    copyMsg.style.display = 'block';
+    copyMsg.innerText = '⚠️ Отправка не удалась. Скопируй текст вручную!';
+    
+    submitBtn.disabled = false;
+    submitBtn.innerText = 'СФОРМИРОВАТЬ ОТВЕТ';
+  });
+});
 }
