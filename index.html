@@ -52,36 +52,35 @@
             <div id="evening-result" class="result-box"></div>
         </section>
 
-        <!-- БЛОК: ЛИЧНОЕ ПОЗДРАВЛЕНИЕ И ФОРМА ОТВЕТА -->
+         <!-- БЛОК: ЛИЧНОЕ ПОЗДРАВЛЕНИЕ И ФОРМА ОТВЕТА -->
         <section>
-  <h2>💌 Личное поздравление</h2>
-  <div class="personal-message-display">
+            <h2>💌 Личное поздравление</h2>
+            <div class="personal-message-display">
 Дорогой Саша! 
 Поздравляю тебя с Новым годом! Желаю тебе в новом году побольше крутых идей, успешных проектов и, конечно же, счастья. Пусть каждый день приносит что-то новое и интересное. Спасибо, что ты мой одногруппник, с тобой всегда весело!
-  </div>
-  
-  <p style="text-align:center; margin-bottom: 20px;">А теперь твой ход! Напиши мне ответ:</p>
-  
-  <!-- Форма с FormSubmit -->
-  <form id="replyForm" class="reply-form">
-    <!-- ВАЖНО: Замените YOUR_EMAIL@gmail.com на ваш реальный email -->
-    <input type="hidden" name="_subject" value="Новый ответ с новогоднего сайта! 🎄">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next" value="#">
-    
-    <input type="text" id="senderName" name="Имя_отправителя" placeholder="Твое имя (например, Саша)" required>
-    <textarea id="replyMessage" name="Сообщение" placeholder="Твой ответ или пожелание..." required></textarea>
-    
-    <button type="submit" class="btn">СФОРМИРОВАТЬ ОТВЕТ</button>
-  </form>
-  
-  <!-- Блок с результатом -->
-  <div id="replyResultContainer" style="display:none; margin-top: 20px;">
-    <p id="copyMsg" class="copy-success-msg">✅ Готово! Текст скопирован и отправлен мне!</p>
-    <div id="replyResultText" class="result-box"></div>
-  </div>
-</section>
+            </div>
+            
+            <p style="text-align:center; margin-bottom: 20px;">А теперь твой ход! Напиши мне ответ:</p>
+            
+            <!-- Форма с FormSubmit -->
+            <form id="replyForm" class="reply-form">
+                <!-- ВАЖНО: Замените YOUR_EMAIL@gmail.com на ваш реальный email -->
+                <input type="hidden" name="_subject" value="Новый ответ с новогоднего сайта! 🎄">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_next" value="#">
+                
+                <input type="text" id="senderName" name="Имя_отправителя" placeholder="Твое имя (например, Саша)" required>
+                <textarea id="replyMessage" name="Сообщение" placeholder="Твой ответ или пожелание..." required></textarea>
+                
+                <button type="submit" class="btn">СФОРМИРОВАТЬ ОТВЕТ</button>
+            </form>
+            
+            <!-- Плашка об успешной отправке -->
+            <div id="successMsg" class="success-message" style="display: none;">
+                ✅ Сообщение успешно отправлено! Я обязательно прочитаю его. Спасибо!
+            </div>
+        </section>
     </div>
 
     <div id="modal" class="modal">
