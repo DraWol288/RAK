@@ -55,31 +55,35 @@
 
         <!-- БЛОК: ЛИЧНОЕ ПОЗДРАВЛЕНИЕ И ФОРМА ОТВЕТА -->
         <section>
-            <h2>💌 Личное поздравление</h2>
-            
-            <!-- Твой текст -->
-            <div class="personal-message-display">
-<!-- ВПИШИ СЮДА СВОЙ ТЕКСТ -->
+  <h2>💌 Личное поздравление</h2>
+  <div class="personal-message-display">
 Дорогой Саша! 
 Поздравляю тебя с Новым годом! Желаю тебе в новом году побольше крутых идей, успешных проектов и, конечно же, счастья. Пусть каждый день приносит что-то новое и интересное. Спасибо, что ты мой одногруппник, с тобой всегда весело!
-            </div>
-
-            <p style="margin-bottom: 20px;">А теперь твой ход! Напиши мне ответ:</p>
-            
-            <!-- Форма для ответа -->
-            <div class="reply-form">
-                <input type="text" id="senderName" placeholder="Твое имя (например, Саша)">
-                <textarea id="replyMessage" placeholder="Твой ответ или пожелание..."></textarea>
-                <button class="btn" onclick="generateReplyText()">Сформировать ответ</button>
-                <div class="copy-success-msg" id="copyMsg">Готово! Текст скопирован.</div>
-            </div>
-
-            <!-- Текстовое поле для результата, которое можно скопировать -->
-            <div id="replyResultContainer" style="display: none; margin-top: 20px;">
-                <p style="color: var(--neon-amber);">Скопируй этот текст и отправь его мне:</p>
-                <div class="personal-message-display" id="replyResultText" style="user-select: all; cursor: text;"></div>
-            </div>
-        </section>
+  </div>
+  
+  <p style="text-align:center; margin-bottom: 20px;">А теперь твой ход! Напиши мне ответ:</p>
+  
+  <!-- Форма с FormSubmit -->
+  <form id="replyForm" class="reply-form">
+    <!-- ВАЖНО: Замените YOUR_EMAIL@gmail.com на ваш реальный email -->
+    <input type="hidden" name="_subject" value="Новый ответ с новогоднего сайта! 🎄">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="#">
+    
+    <input type="text" id="senderName" name="Имя_отправителя" placeholder="Твое имя (например, Саша)" required>
+    <textarea id="replyMessage" name="Сообщение" placeholder="Твой ответ или пожелание..." required></textarea>
+    
+    <button type="submit" class="btn">СФОРМИРОВАТЬ ОТВЕТ</button>
+  </form>
+  
+  <!-- Блок с результатом -->
+  <div id="replyResultContainer" style="display:none; margin-top: 20px;">
+    <p id="copyMsg" class="copy-success-msg">✅ Готово! Текст скопирован и отправлен мне!</p>
+    <p style="color: var(--neon-amber);">Скопируй этот текст и отправь его мне:</p>
+    <div id="replyResultText" class="result-box"></div>
+  </div>
+</section>
     </div>
 
     <div id="modal" class="modal">
