@@ -114,8 +114,8 @@ h2 {
 
 .ornament {
     position: absolute;
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     background-color: var(--bg-dark);
     border-radius: 50%;
     cursor: pointer;
