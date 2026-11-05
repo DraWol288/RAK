@@ -282,6 +282,17 @@ const successMsg = document.getElementById('successMsg');
 form.addEventListener('submit', function(e) {
     e.preventDefault(); // Останавливаем стандартную перезагрузку страницы
     
+    // --- ПРОВЕРКА НА ПУСТЫЕ ПОЛЯ ---
+    const nameInput = document.getElementById('senderName');
+    const messageInput = document.getElementById('replyMessage');
+    
+    // trim() удаляет лишние пробелы по краям. Если после этого строка пустая - выдаем ошибку
+    if (nameInput.value.trim() === '' || messageInput.value.trim() === '') {
+        alert('Пожалуйста, заполни Имя и Сообщение! Пустые поля отправить нельзя.');
+        return; // Останавливаем выполнение скрипта
+    }
+    // -------------------------------
+
     const formData = new FormData(form);
     
     // Меняем текст кнопки, чтобы показать, что идет отправка
@@ -290,7 +301,7 @@ form.addEventListener('submit', function(e) {
     submitBtn.innerText = 'ОТПРАВКА...';
     submitBtn.disabled = true;
 
-    fetch('https://formspree.io/f/myeelzqp', { // <-- Вставь свою ссылку сюда
+    fetch('https://formspree.io/f/myeelzqp', { 
         method: 'POST',
         body: formData,
         headers: {
@@ -300,8 +311,8 @@ form.addEventListener('submit', function(e) {
     .then(response => {
         if (response.ok) {
             // Успешная отправка
-            form.style.display = 'none'; // Скрываем форму
-            successMsg.style.display = 'block'; // Показываем плашку
+            form.style.display = 'none'; 
+            successMsg.style.display = 'block'; 
         } else {
             response.json().then(data => {
                 if (Object.hasOwn(data, 'errors')) {
@@ -316,7 +327,7 @@ form.addEventListener('submit', function(e) {
         alert("Ошибка сети. Проверь подключение к интернету.");
     })
     .finally(() => {
-        // Возвращаем кнопку в исходное состояние (если форма не скрылась)
+        // Возвращаем кнопку в исходное состояние
         submitBtn.innerText = originalBtnText;
         submitBtn.disabled = false;
     });
