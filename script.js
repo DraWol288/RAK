@@ -358,3 +358,49 @@ document.addEventListener('DOMContentLoaded', () => {
         section.insertBefore(decor, section.firstChild);
     });
 });
+
+// --- 10. Логика для левой панели (Кликер) ---
+let clicks = 0;
+const clickMessages = [
+    "Ну давай, еще разок!",
+    "Ого, ты быстрый!",
+    "Саша, ты рвешь шаблоны!",
+    "Твой палец как процессор!",
+    "Еще чуть-чуть до рекорда!",
+    "Клик-клик-клик!",
+    "Это лучший клик в твоей жизни!",
+    "Ты официально крут!",
+    "Не останавливайся!",
+    "Ого, да ты машина!"
+];
+
+document.getElementById('clickerBtn').addEventListener('click', () => {
+    clicks++;
+    document.getElementById('clickCount').innerText = clicks;
+    
+    // Меняем сообщение каждые 5 кликов или рандомно
+    if (clicks % 5 === 0 || clicks === 1) {
+        const randomMsg = clickMessages[Math.floor(Math.random() * clickMessages.length)];
+        document.getElementById('clickMessage').innerText = randomMsg;
+    }
+});
+
+// --- 11. Логика для правой панели (Комплименты) ---
+const compliments = [
+    "Ты лучший одногруппник в мире!",
+    "С тобой любой проект по плечу.",
+    "У тебя отличное чувство юмора!",
+    "Ты очень надежный друг.",
+    "Твой код всегда работает (почти).",
+    "Ты умеешь найти выход из любой ситуации.",
+    "С тобой всегда весело на парах.",
+    "Ты классный собеседник.",
+    "Все баги тебя боятся.",
+    "Ты крутой! Не забывай об этом.",
+    "Пусть новый год принесет тебе только лучшее!"
+];
+
+document.getElementById('complimentBtn').addEventListener('click', () => {
+    const randomIndex = Math.floor(Math.random() * compliments.length);
+    document.getElementById('complimentText').innerText = compliments[randomIndex];
+});
