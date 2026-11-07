@@ -332,3 +332,29 @@ form.addEventListener('submit', function(e) {
         submitBtn.disabled = false;
     });
 });
+
+// --- 9. Добавление декоративных HUD-элементов в секции ---
+document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('section');
+    
+    sections.forEach(section => {
+        // Создаем контейнер для декора
+        const decor = document.createElement('div');
+        decor.className = 'section-decor';
+        
+        // Левая линия
+        const lineLeft = document.createElement('div');
+        lineLeft.className = 'decor-line left-line';
+        
+        // Правая линия
+        const lineRight = document.createElement('div');
+        lineRight.className = 'decor-line right-line';
+        
+        // Добавляем линии
+        decor.appendChild(lineLeft);
+        decor.appendChild(lineRight);
+        
+        // Вставляем в начало секции
+        section.insertBefore(decor, section.firstChild);
+    });
+});
