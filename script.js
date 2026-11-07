@@ -404,3 +404,35 @@ document.getElementById('complimentBtn').addEventListener('click', () => {
     const randomIndex = Math.floor(Math.random() * compliments.length);
     document.getElementById('complimentText').innerText = compliments[randomIndex];
 });
+
+// --- Кликер (Левая колонка) ---
+let clicks = 0;
+const clickMessages = ["Ну давай, еще разок!", "Ого, ты быстрый!", "Саша, ты рвешь шаблоны!", "Твой палец как процессор!", "Клик-клик-клик!", "Это лучший клик в твоей жизни!", "Ты официально крут!"];
+const clickerBtn = document.getElementById('clickerBtn');
+if (clickerBtn) {
+    clickerBtn.addEventListener('click', () => {
+        clicks++;
+        document.getElementById('clickCount').innerText = clicks;
+        if (clicks % 5 === 0 || clicks === 1) {
+            const randomMsg = clickMessages[Math.floor(Math.random() * clickMessages.length)];
+            document.getElementById('clickMessage').innerText = randomMsg;
+        }
+    });
+}
+
+// --- Кубик (Левая колонка) ---
+function rollDice() {
+    const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅']; // Символы кубиков
+    const randomFace = diceFaces[Math.floor(Math.random() * diceFaces.length)];
+    document.getElementById('diceResult').innerText = randomFace;
+}
+
+// --- Комплименты (Правая колонка) ---
+const compliments = ["Ты лучший одногруппник в мире!", "С тобой любой проект по плечу.", "У тебя отличное чувство юмора!", "Ты очень надежный друг.", "Твой код всегда работает (почти).", "Ты умеешь найти выход из любой ситуации.", "С тобой всегда весело на парах.", "Ты классный собеседник.", "Все баги тебя боятся.", "Ты крутой! Не забывай об этом."];
+const complimentBtn = document.getElementById('complimentBtn');
+if (complimentBtn) {
+    complimentBtn.addEventListener('click', () => {
+        const randomIndex = Math.floor(Math.random() * compliments.length);
+        document.getElementById('complimentText').innerText = compliments[randomIndex];
+    });
+}
