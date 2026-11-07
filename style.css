@@ -490,3 +490,40 @@ section > p, .tree-container, .scratch-container, .bingo-grid, .holiday-bingo, .
         width: 200px;
     }
 }
+
+/* --- Декоративные элементы для заполнения пустоты --- */
+.section-decor {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 0;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.decor-line {
+    position: absolute;
+    height: 1px;
+    width: 25%; /* Длина линий */
+    background: linear-gradient(90deg, transparent, var(--neon-amber), transparent);
+    opacity: 0.4;
+}
+
+.left-line {
+    left: 5%;
+    top: -20px;
+}
+
+.right-line {
+    right: 5%;
+    top: 20px;
+}
+
+/* На мобильных устройствах прячем линии, чтобы не мешали */
+@media (max-width: 768px) {
+    .decor-line {
+        display: none;
+    }
+}
