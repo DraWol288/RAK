@@ -576,3 +576,59 @@ section > p, .tree-container, .scratch-container, .bingo-grid, .holiday-bingo, .
         display: none;
     }
 }
+
+/* --- Боковые панели с мини-играми --- */
+.side-panel {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 180px;
+    z-index: 10;
+    background: rgba(18, 13, 10, 0.6);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--neon-copper);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.side-panel:hover {
+    border-color: var(--neon-gold);
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+    background: rgba(18, 13, 10, 0.8);
+}
+
+.left-panel { left: 20px; }
+.right-panel { right: 20px; }
+
+.panel-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.panel-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1em;
+    color: var(--neon-gold);
+    text-shadow: var(--glow-gold);
+    border-bottom: 1px dashed var(--neon-copper);
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+.counter-display {
+    font-size: 1.2em;
+    color: var(--neon-cream);
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Прячем панели на планшетах и телефонах, чтобы не перекрывать контент */
+@media (max-width: 1200px) {
+    .side-panel {
+        display: none;
+    }
+}
