@@ -20,14 +20,66 @@ body {
     padding: 0;
     font-family: 'Courier New', Courier, monospace;
     background-color: var(--bg-dark);
+    
+    /* Основная сетка */
     background-image: 
         linear-gradient(rgba(255, 140, 0, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 204, 0, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
+    
     color: var(--text-main);
     overflow-x: hidden;
     min-height: 100vh;
     position: relative;
+}
+
+/* --- ДОБАВЛЯЕМ ДЕКОР НА ФОН (По бокам от блоков) --- */
+body::before, body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--neon-gold), var(--neon-amber), transparent);
+    opacity: 0.3;
+    box-shadow: 0 0 15px var(--neon-amber);
+    z-index: 0;
+}
+
+/* Левая линия */
+body::before {
+    left: 10%; /* Отступ от левого края */
+}
+
+/* Правая линия */
+body::after {
+    right: 10%; /* Отступ от правого края */
+}
+
+/* Добавляем светящиеся ромбы на фоне по бокам */
+.bg-decor-left, .bg-decor-right {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border: 1px dashed var(--neon-copper);
+    opacity: 0.1;
+    z-index: 0;
+    pointer-events: none;
+    animation: spin 30s linear infinite;
+}
+
+.bg-decor-left {
+    top: 20%;
+    left: -100px;
+}
+
+.bg-decor-right {
+    bottom: 10%;
+    right: -100px;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
 }
 
 #snow-container {
@@ -81,9 +133,6 @@ section {
     position: relative;
     overflow: hidden; /* Чтобы декор не вылезал за края */
     
-    /* Добавляем легкий градиентный фон для заполнения пространства */
-    background-image: linear-gradient(45deg, rgba(255, 204, 0, 0.03) 25%, transparent 25%, transparent 50%, rgba(255, 204, 0, 0.03) 50%, rgba(255, 204, 0, 0.03) 75%, transparent 75%, transparent);
-    background-size: 20px 20px; 
 }
 
 /* Оставляем старые уголки, но делаем их больше */
