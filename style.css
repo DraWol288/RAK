@@ -33,17 +33,21 @@ body {
 /* Главная сетка */
 .layout-grid {
     display: grid;
-    grid-template-columns: 280px 1fr 280px; /* Ширина боковушек и центра */
+    /* Делаем центральную колонку фиксированной (как было раньше), а боковые - резиновыми */
+    grid-template-columns: minmax(250px, 1fr) 900px minmax(250px, 1fr); 
     gap: 30px;
-    max-width: 1600px; /* Увеличили максимальную ширину */
+    max-width: 1600px; 
     margin: 0 auto;
     padding: 20px;
     position: relative;
     z-index: 2;
+    justify-content: center; /* Центрируем всю конструкцию */
 }
 
 .main-content {
     width: 100%;
+    max-width: 900px; /* Ограничиваем ширину центрального блока, как было раньше */
+    margin: 0 auto;
     text-align: center;
 }
 
