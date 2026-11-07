@@ -404,3 +404,10 @@ document.getElementById('complimentBtn').addEventListener('click', () => {
     const randomIndex = Math.floor(Math.random() * compliments.length);
     document.getElementById('complimentText').innerText = compliments[randomIndex];
 });
+
+// --- Функция для броска кубика (Левая колонка) ---
+function rollDice() {
+    const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅']; // Символы кубиков
+    const randomFace = diceFaces[Math.floor(Math.random() * diceFaces.length)];
+    document.getElementById('diceResult').innerText = randomFace;
+}
