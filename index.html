@@ -14,103 +14,156 @@
     
     <div id="snow-container"></div>
 
-    <!-- ЛЕВАЯ ПАНЕЛЬ (Кликер) -->
-    <div class="side-panel left-panel">
-        <div class="panel-content">
-            <h3>🎮 Кликер</h3>
-            <p style="font-size: 0.8em; color: var(--neon-cream);">Нажми на кнопку!</p>
-            <button id="clickerBtn" class="btn" style="padding: 10px 15px; font-size: 1em; margin: 5px 0;">Клик!</button>
-            <div class="counter-display">Счет: <span id="clickCount">0</span></div>
-            <div id="clickMessage" style="font-size: 0.8em; margin-top: 10px; min-height: 40px; color: var(--neon-amber);"></div>
-        </div>
-    </div>
-
-    <!-- ПРАВАЯ ПАНЕЛЬ (Комплименты) -->
-    <div class="side-panel right-panel">
-        <div class="panel-content">
-            <h3>✨ Комплимент</h3>
-            <p style="font-size: 0.8em; color: var(--neon-cream);">Нажми, чтобы поднять настроение</p>
-            <button id="complimentBtn" class="btn" style="padding: 10px 15px; font-size: 1em; margin: 5px 0;">Получить</button>
-            <div id="complimentText" style="font-size: 0.9em; margin-top: 15px; min-height: 60px; color: var(--neon-gold); font-weight: bold; text-shadow: 0 0 5px var(--neon-gold);"></div>
-        </div>
-    </div>
-
     <div class="container">
         <h1>С Новым Годом, Саша!</h1>
 
-         <!-- Блок с изображением -->
-        <div class="hero-image-container">
-            <img src="sasha.png" alt="Саша" class="hero-image">
-        </div>
+         <!-- ОСНОВНАЯ СЕТКА -->
+    <div class="layout-grid">
+        
+        <!-- ЛЕВАЯ КОЛОНКА -->
+        <aside class="side-column left-column">
+            <div class="side-widget">
+                <h3>🎮 Кликер</h3>
+                <p style="font-size: 0.8em;">Нажми кнопку!</p>
+                <button id="clickerBtn" class="btn" style="padding: 10px; font-size: 1em; margin: 5px 0;">Клик!</button>
+                <div class="counter-display" style="font-size: 1em; margin-top: 5px;">Счет: <span id="clickCount">0</span></div>
+                <div id="clickMessage" style="font-size: 0.8em; margin-top: 10px; min-height: 40px; color: var(--neon-amber);"></div>
+            </div>
 
-        <section>
-            <h2>🎄 Виртуальная Ёлка</h2>
-            <p>Нажми на светящиеся шары, чтобы получить послание.</p>
-            <div class="tree-container" id="tree"></div>
-        </section>
+            <div class="side-widget">
+                <h3>💻 Терминал</h3>
+                <div class="terminal-text">
+                    > Подключение к серверу...<br>
+                    > Доступ разрешен.<br>
+                    > Статус: Новый Год.<br>
+                    > Настроение: Отличное.
+                </div>
+            </div>
 
-        <section>
-            <h2>🎟️ Скретч-карты</h2>
-            <p>Сотри защитный слой мышкой (или пальцем), чтобы узнать предсказание!</p>
-            <div class="scratch-container" id="scratch-container"></div>
-        </section>
+            <div class="side-widget">
+                <h3>🎲 Кубик</h3>
+                <p style="font-size: 0.8em;">Брось кубик удачи</p>
+                <div id="diceResult" style="font-size: 3em; margin: 10px 0; text-shadow: var(--glow-gold);">🎲</div>
+                <button onclick="rollDice()" class="btn" style="padding: 10px; font-size: 0.9em;">Бросить</button>
+            </div>
 
-        <section>
-            <h2>🎯 Бинго Новогодних Обещаний</h2>
-            <p>Кликай по клеткам, которые ты обещаешь выполнить. Собери линию!</p>
-            <div class="bingo-grid" id="bingo-grid"></div>
-            <div id="bingo-result" class="result-box"></div>
-        </section>
+            <div class="side-widget">
+                <h3>🌌 Космос</h3>
+                <p style="font-size: 0.8em;">Факт дня:</p>
+                <p id="spaceFact" style="font-size: 0.9em; color: var(--neon-cream); line-height: 1.4;">В космосе нельзя плакать, потому что слезы не стекают вниз.</p>
+            </div>
+        </aside>
 
-        <section>
-            <h2>🔮 Предсказание на год</h2>
-            <p>Нажми на кнопку, чтобы узнать, что тебя ждёт в новом году.</p>
-            <button class="btn" onclick="generatePrediction()">Узнать, что тебя ждёт!</button>
-            <div id="prediction-result" class="result-box"></div>
-        </section>
+        <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА (Твои основные блоки) -->
+        <main class="main-content">
+            <h1>С Новым Годом, Саша!</h1>
+            
+            <div class="hero-image-container">
+                <img src="sasha.png" alt="Саша" class="hero-image">
+            </div>
 
-        <section>
-            <h2>🎉 Новогоднее Бинго</h2>
-            <p>Отметь, что уже случилось с тобой в этом году:</p>
-            <div class="holiday-bingo" id="holiday-bingo"></div>
-        </section>
+            <section>
+                <h2>🎄 Виртуальная Ёлка</h2>
+                <p>Нажми на светящиеся шары, чтобы получить послание.</p>
+                <div class="tree-container" id="tree"></div>
+            </section>
 
-        <section>
-            <h2>🍿 Идеальный зимний вечер</h2>
-            <p>Не знаешь, чем заняться? Нажми на кнопку!</p>
-            <button class="btn" onclick="generateEvening()">Сгенерировать вечер</button>
-            <div id="evening-result" class="result-box"></div>
-        </section>
+            <section>
+                <h2>🎟️ Скретч-карты</h2>
+                <p>Сотри защитный слой мышкой (или пальцем), чтобы узнать предсказание!</p>
+                <div class="scratch-container" id="scratch-container"></div>
+            </section>
 
-         <!-- БЛОК: ЛИЧНОЕ ПОЗДРАВЛЕНИЕ И ФОРМА ОТВЕТА -->
-        <section>
-            <h2>💌 Личное поздравление</h2>
-            <div class="personal-message-display">
+            <section>
+                <h2>🎯 Бинго Новогодних Обещаний</h2>
+                <p>Кликай по клеткам, которые ты обещаешь выполнить. Собери линию!</p>
+                <div class="bingo-grid" id="bingo-grid"></div>
+                <div id="bingo-result" class="result-box"></div>
+            </section>
+
+            <section>
+                <h2>🔮 Предсказание на год</h2>
+                <p>Нажми на кнопку, чтобы узнать, что тебя ждёт в новом году.</p>
+                <button class="btn" onclick="generatePrediction()">Узнать, что тебя ждёт!</button>
+                <div id="prediction-result" class="result-box"></div>
+            </section>
+
+            <section>
+                <h2>🎉 Новогоднее Бинго</h2>
+                <p>Отметь, что уже случилось с тобой в этом году:</p>
+                <div class="holiday-bingo" id="holiday-bingo"></div>
+            </section>
+
+            <section>
+                <h2>🍿 Идеальный зимний вечер</h2>
+                <p>Не знаешь, чем заняться? Нажми на кнопку!</p>
+                <button class="btn" onclick="generateEvening()">Сгенерировать вечер</button>
+                <div id="evening-result" class="result-box"></div>
+            </section>
+
+            <section>
+                <h2>💌 Личное поздравление</h2>
+                <div class="personal-message-display">
 Дорогой Саша! 
 Поздравляю тебя с Новым годом! Желаю тебе в новом году побольше крутых идей, успешных проектов и, конечно же, счастья. Пусть каждый день приносит что-то новое и интересное. Спасибо, что ты мой одногруппник, с тобой всегда весело!
-            </div>
-            
-            <p style="text-align:center; margin-bottom: 20px;">А теперь твой ход! Напиши мне ответ:</p>
-            
-            <!-- Форма с FormSubmit -->
-            <form id="replyForm" class="reply-form" action="https://formspree.io/f/myeelzqp" method="POST">
-                <!-- ВАЖНО: Замените YOUR_EMAIL@gmail.com на ваш реальный email -->
-                <input type="hidden" name="_subject" value="Новый ответ с новогоднего сайта! 🎄">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
-                <input type="hidden" name="_next" value="#">
+                </div>
                 
-                <input type="text" id="senderName" name="Имя_отправителя" placeholder="Твое имя" required>
-                <textarea id="replyMessage" name="Сообщение" placeholder="Твой ответ или пожелание..." required></textarea>
+                <p style="text-align:center; margin-bottom: 20px;">А теперь твой ход! Напиши мне ответ:</p>
                 
-                <button type="submit" class="btn">СФОРМИРОВАТЬ ОТВЕТ</button>
-            </form>
-            
-            <!-- Плашка об успешной отправке -->
-            <div id="successMsg" class="success-message" style="display: none;">
-                ✅ Сообщение успешно отправлено! Я обязательно прочитаю его. Спасибо!
+                <form id="replyForm" class="reply-form" action="https://formspree.io/f/myeelzqp" method="POST">
+                    <input type="hidden" name="_subject" value="Новый ответ с новогоднего сайта! 🎄">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_next" value="#">
+                    
+                    <input type="text" id="senderName" name="Имя_отправителя" placeholder="Твое имя (нужно для работы формы)" required>
+                    <textarea id="replyMessage" name="Сообщение" placeholder="Твой ответ или пожелание..." required></textarea>
+                    
+                    <button type="submit" class="btn">СФОРМИРОВАТЬ ОТВЕТ</button>
+                </form>
+                
+                <div id="successMsg" class="success-message" style="display: none;">
+                    ✅ Сообщение успешно отправлено! Я обязательно прочитаю его. Спасибо!
+                </div>
+            </section>
+        </main>
+
+        <!-- ПРАВАЯ КОЛОНКА -->
+        <aside class="side-column right-column">
+            <div class="side-widget">
+                <h3>✨ Комплимент</h3>
+                <p style="font-size: 0.8em;">Нажми, чтобы поднять настроение</p>
+                <button id="complimentBtn" class="btn" style="padding: 10px; font-size: 1em; margin: 5px 0;">Получить</button>
+                <div id="complimentText" style="font-size: 0.9em; margin-top: 10px; min-height: 60px; color: var(--neon-gold); font-weight: bold; text-shadow: 0 0 5px var(--neon-gold);"></div>
             </div>
-        </section>
+
+            <div class="side-widget">
+                <h3>📊 Статистика</h3>
+                <div style="font-size: 0.85em; line-height: 1.6; text-align: left; color: var(--neon-cream);">
+                    Уровень крутости: <span style="color: var(--neon-gold);">MAX</span><br>
+                    Баги в коде: <span style="color: var(--neon-amber);">0</span><br>
+                    Счастье: <span style="color: #00ff66;">100%</span><br>
+                    Планы на год: <span style="color: var(--neon-gold);">Грандиозные</span>
+                </div>
+            </div>
+
+            <div class="side-widget">
+                <h3>💡 Совет дня</h3>
+                <p style="font-size: 0.9em; color: var(--neon-cream); line-height: 1.4;">Не забывай делать перерывы в учебе. Отдых — это тоже часть работы!</p>
+            </div>
+
+            <div class="side-widget">
+                <h3>🎵 Плейлист</h3>
+                <p style="font-size: 0.8em;">Включи новогоднее настроение:</p>
+                <div style="font-size: 0.85em; color: var(--neon-amber); text-align: left; line-height: 1.5;">
+                    1. Jingle Bell Rock<br>
+                    2. Last Christmas<br>
+                    3. С новым годом!<br>
+                    4. Happy New Year
+                </div>
+            </div>
+        </aside>
+
     </div>
 
     <div id="modal" class="modal">
