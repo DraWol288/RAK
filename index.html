@@ -14,16 +14,16 @@
     
     <div id="snow-container"></div>
 
-    <!-- === ДОБАВЛЕНО: переключатель тем === -->
-    <div class="theme-switcher" id="themeSwitcher" role="group" aria-label="Выбор темы оформления">
+    <!-- === ДОБАВЛЕНО (только ПК): переключатель тем === -->
+    <div class="theme-switcher pc-only" id="themeSwitcher" role="group" aria-label="Выбор темы оформления">
         <button class="theme-btn active" data-theme="gold" title="Золото/неон" aria-label="Тема: Золото"></button>
         <button class="theme-btn" data-theme="ice" title="Ледяная" aria-label="Тема: Ледяная"></button>
         <button class="theme-btn" data-theme="classic" title="Классика" aria-label="Тема: Классика"></button>
         <button class="theme-btn" data-theme="terminal" title="Терминал" aria-label="Тема: Терминал"></button>
     </div>
 
-    <!-- === ДОБАВЛЕНО: прогресс-бар открытых разделов === -->
-    <div class="progress-tracker" id="progressTracker">
+    <!-- === ДОБАВЛЕНО (только ПК): прогресс-бар === -->
+    <div class="progress-tracker pc-only" id="progressTracker">
         <div class="tracker-label">
             <span>📊 Прогресс</span>
             <span class="tracker-count">0/8</span>
@@ -192,11 +192,11 @@
         </div>
     </div>
 
-    <!-- === ДОБАВЛЕНО: кнопка звука === -->
-    <button id="soundToggle" class="sound-toggle" aria-label="Переключить звук" title="Звук вкл/выкл">🔊</button>
+    <!-- === ДОБАВЛЕНО (только ПК): кнопка звука === -->
+    <button id="soundToggle" class="sound-toggle pc-only" aria-label="Переключить звук" title="Звук вкл/выкл">🔊</button>
 
-    <!-- === ДОБАВЛЕНО: контейнер для достижений (наполняется JS) === -->
-    <div class="achievements-bar" id="achievementsBar" aria-label="Достижения"></div>
+    <!-- === ДОБАВЛЕНО (только ПК): контейнер для достижений === -->
+    <div class="achievements-bar pc-only" id="achievementsBar" aria-label="Достижения"></div>
 
     <script src="script.js"></script>
 </body>
