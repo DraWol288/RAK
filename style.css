@@ -1037,3 +1037,335 @@ textarea:focus-visible,
     .achievements-bar { display: none; }
     .sound-toggle { bottom: 15px; right: 15px; }
 }
+
+/* ============================================================
+   === ДОБАВЛЕНО: расширения ТОЛЬКО ДЛЯ ПК (>= 769px) ===
+   На мобилках и планшетах весь этот блок не применяется.
+   ============================================================ */
+
+/* Скрываем ПК-элементы на мобилках по умолчанию */
+@media (max-width: 768px) {
+    .pc-only { display: none !important; }
+}
+
+/* Всё ниже — только для ПК */
+@media (min-width: 769px) {
+
+    /* --- 1. Курсор-ёлка (только ПК) --- */
+    body {
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><polygon points="16,2 26,14 22,14 28,24 19,24 22,30 10,30 13,24 4,24 10,14 6,14" fill="%23ffcc00" stroke="%23120d0a" stroke-width="1.2"/><circle cx="16" cy="6" r="1.6" fill="%23ff8c00"/></svg>') 4 28, auto;
+    }
+
+    button, .btn, .ornament, .bingo-cell, .holiday-item,
+    .scratch-card canvas, #clickerBtn, #complimentBtn, .close-btn,
+    a, input[type="submit"], .theme-btn {
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><polygon points="16,2 26,14 22,14 28,24 19,24 22,30 10,30 13,24 4,24 10,14 6,14" fill="%23ff8c00" stroke="%23120d0a" stroke-width="1.2"/><circle cx="16" cy="6" r="1.6" fill="%23ffcc00"/></svg>') 4 28, pointer;
+    }
+
+    input, textarea { cursor: text; }
+
+    /* --- 2. Параллакс --- */
+    .bg-decor-left, .bg-decor-right {
+        transition: transform 0.15s ease-out;
+        will-change: transform;
+    }
+
+    /* --- 3. Достижения --- */
+    .achievements-bar {
+        position: fixed;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 50;
+        padding: 10px 16px;
+        background: rgba(18, 13, 10, 0.85);
+        border: 1px solid var(--neon-copper);
+        border-radius: 12px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+        max-width: 95vw;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .achievement-badge {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4em;
+        border: 2px solid var(--text-dim);
+        background: rgba(0, 0, 0, 0.4);
+        opacity: 0.25;
+        filter: grayscale(1);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .achievement-badge.unlocked {
+        opacity: 1;
+        filter: none;
+        border-color: var(--neon-gold);
+        box-shadow: 0 0 12px var(--neon-gold), inset 0 0 8px rgba(255, 204, 0, 0.3);
+        animation: badgePop 0.5s ease-out;
+    }
+
+    .achievement-badge::after {
+        content: attr(data-title);
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%) translateY(4px);
+        background: var(--bg-dark);
+        color: var(--neon-cream);
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--neon-gold);
+        font-size: 0.7em;
+        font-family: 'Courier New', monospace;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.2s;
+        box-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+    }
+
+    .achievement-badge:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes badgePop {
+        0% { transform: scale(0.5); }
+        60% { transform: scale(1.25); }
+        100% { transform: scale(1); }
+    }
+
+    .achievement-toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-120%);
+        background: linear-gradient(135deg, rgba(40, 25, 15, 0.98), rgba(18, 13, 10, 0.98));
+        border: 2px solid var(--neon-gold);
+        border-radius: 12px;
+        padding: 14px 22px;
+        color: var(--neon-cream);
+        box-shadow: 0 0 25px var(--neon-gold), inset 0 0 12px rgba(255, 204, 0, 0.15);
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: 'Courier New', monospace;
+        transition: transform 0.45s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        max-width: 90vw;
+    }
+
+    .achievement-toast.show { transform: translateX(-50%) translateY(0); }
+    .achievement-toast .toast-icon { font-size: 1.8em; filter: drop-shadow(0 0 6px var(--neon-gold)); }
+    .achievement-toast .toast-text { display: flex; flex-direction: column; gap: 2px; }
+    .achievement-toast .toast-title {
+        color: var(--neon-gold);
+        font-weight: bold;
+        text-shadow: 0 0 6px var(--neon-gold);
+        font-size: 0.85em;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    .achievement-toast .toast-desc { font-size: 0.95em; }
+
+    /* --- 4. Прогресс-бар --- */
+    .progress-tracker {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        z-index: 50;
+        background: rgba(18, 13, 10, 0.85);
+        border: 1px solid var(--neon-copper);
+        border-radius: 10px;
+        padding: 8px 14px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 0 12px rgba(255, 140, 0, 0.25);
+        font-family: 'Courier New', monospace;
+        font-size: 0.8em;
+        color: var(--neon-cream);
+        min-width: 170px;
+    }
+
+    .progress-tracker .tracker-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        color: var(--neon-gold);
+        text-shadow: 0 0 5px var(--neon-gold);
+    }
+
+    .progress-tracker .tracker-bar-bg {
+        width: 100%;
+        height: 8px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 5px;
+        overflow: hidden;
+        border: 1px solid var(--neon-copper);
+    }
+
+    .progress-tracker .tracker-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--neon-amber), var(--neon-gold));
+        box-shadow: 0 0 10px var(--neon-gold);
+        transition: width 0.5s ease-out;
+        border-radius: 4px;
+    }
+
+    /* --- 5. Переключатель темы --- */
+    .theme-switcher {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 50;
+        display: flex;
+        gap: 6px;
+        padding: 6px;
+        background: rgba(18, 13, 10, 0.85);
+        border: 1px solid var(--neon-copper);
+        border-radius: 10px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 0 12px rgba(255, 140, 0, 0.25);
+    }
+
+    .theme-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        transition: all 0.25s;
+        padding: 0;
+    }
+
+    .theme-btn:hover { transform: scale(1.15); }
+    .theme-btn.active { border-color: var(--neon-gold); box-shadow: 0 0 10px var(--neon-gold); }
+    .theme-btn[data-theme="gold"] { background: linear-gradient(135deg, #ffcc00, #ff8c00); }
+    .theme-btn[data-theme="ice"]  { background: linear-gradient(135deg, #7dd3fc, #38bdf8); }
+    .theme-btn[data-theme="classic"] { background: linear-gradient(135deg, #dc2626, #16a34a); }
+    .theme-btn[data-theme="terminal"] { background: linear-gradient(135deg, #00ff66, #003311); }
+
+    /* --- 6. Кнопка звука --- */
+    .sound-toggle {
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+        z-index: 60;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(18, 13, 10, 0.85);
+        color: #ffcc00;
+        border: 1px solid var(--neon-copper);
+        font-size: 1.2em;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 0 12px rgba(255, 140, 0, 0.3);
+        transition: transform 0.2s, opacity 0.3s;
+    }
+    .sound-toggle:hover { transform: scale(1.1); }
+
+    /* --- 7. ТЕМА "ЛЁД" --- */
+    [data-theme="ice"] {
+        --bg-dark: #0a1420;
+        --bg-panel: rgba(20, 40, 60, 0.85);
+        --neon-gold: #7dd3fc;
+        --neon-amber: #38bdf8;
+        --neon-copper: #0ea5e9;
+        --neon-cream: #e0f2fe;
+        --text-main: #d0e8f5;
+        --text-dim: #6b94ad;
+        --glow-gold: 0 0 10px #7dd3fc, 0 0 20px #38bdf8;
+        --glow-amber: 0 0 10px #38bdf8, 0 0 20px #0ea5e9;
+    }
+    [data-theme="ice"] body {
+        background-image:
+            linear-gradient(rgba(56, 189, 248, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(125, 211, 252, 0.06) 1px, transparent 1px);
+    }
+
+    /* --- 8. ТЕМА "КЛАССИКА" --- */
+    [data-theme="classic"] {
+        --bg-dark: #0d1a0d;
+        --bg-panel: rgba(30, 15, 15, 0.85);
+        --neon-gold: #ff4545;
+        --neon-amber: #dc2626;
+        --neon-copper: #16a34a;
+        --neon-cream: #e8f5e0;
+        --text-main: #d5e8cc;
+        --text-dim: #7a8a6b;
+        --glow-gold: 0 0 10px #ff4545, 0 0 20px #dc2626;
+        --glow-amber: 0 0 10px #16a34a, 0 0 20px #15803d;
+    }
+    [data-theme="classic"] body {
+        background-image:
+            linear-gradient(rgba(22, 163, 74, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(220, 38, 38, 0.06) 1px, transparent 1px);
+    }
+
+    /* --- 9. ТЕМА "ТЕРМИНАЛ" --- */
+    [data-theme="terminal"] {
+        --bg-dark: #000000;
+        --bg-panel: rgba(0, 25, 0, 0.9);
+        --neon-gold: #00ff66;
+        --neon-amber: #00cc44;
+        --neon-copper: #008833;
+        --neon-cream: #aaffaa;
+        --text-main: #88ff88;
+        --text-dim: #226622;
+        --glow-gold: 0 0 8px #00ff66, 0 0 16px #00ff66;
+        --glow-amber: 0 0 8px #00cc44, 0 0 16px #00cc44;
+    }
+    [data-theme="terminal"] body { background-image: none; background-color: #000; }
+    [data-theme="terminal"] .hero-image {
+        filter: drop-shadow(0 0 12px #00ff66) grayscale(0.7) sepia(1) hue-rotate(60deg) saturate(3);
+    }
+
+    /* --- 10. Доступность: keyboard focus --- */
+    button:focus-visible,
+    .btn:focus-visible,
+    .bingo-cell:focus-visible,
+    .holiday-item:focus-visible,
+    .ornament:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    .theme-btn:focus-visible,
+    .scratch-card canvas:focus-visible {
+        outline: 2px dashed var(--neon-gold);
+        outline-offset: 3px;
+    }
+}
+
+/* --- 11. СВЕТЛАЯ ТЕМА (prefers-color-scheme) — тоже только ПК --- */
+@media (min-width: 769px) and (prefers-color-scheme: light) {
+    [data-theme="gold"] {
+        --bg-dark: #fdf6ec;
+        --bg-panel: rgba(255, 245, 230, 0.92);
+        --neon-gold: #b45309;
+        --neon-amber: #d97706;
+        --neon-copper: #92400e;
+        --neon-cream: #3f2a15;
+        --text-main: #3f2a15;
+        --text-dim: #7a5a3a;
+        --glow-gold: 0 0 4px rgba(180, 83, 9, 0.5), 0 0 8px rgba(217, 119, 6, 0.3);
+        --glow-amber: 0 0 4px rgba(217, 119, 6, 0.5), 0 0 8px rgba(146, 64, 14, 0.3);
+    }
+    [data-theme="gold"] body {
+        background-image:
+            linear-gradient(rgba(180, 83, 9, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(217, 119, 6, 0.06) 1px, transparent 1px);
+    }
+    [data-theme="gold"] .terminal-text { background: #f0f0f0; color: #008822; border-color: #ccc; }
+    [data-theme="gold"] .hero-image { filter: drop-shadow(0 0 8px rgba(180, 83, 9, 0.5)); }
+}
+
+/* --- 12. Общий user-select для игровых элементов (все устройства) --- */
+.bingo-cell, .holiday-item, .ornament { user-select: none; }
