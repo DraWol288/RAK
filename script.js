@@ -25,7 +25,7 @@ function createSnow() {
 createSnow();
 
 // --- 2. Ёлка с шарами ---
-const tree = document.getElementById('treeContainer');   /* === ИЗМЕНЕНО === */
+const tree = document.getElementById('treeContainer');
 const ornamentsData = [
     { top: '13%', left: '47%', text: '🎁', title: 'Подарок!', message: 'Саша, желаю тебе в новом году кучу крутых подарков и неожиданных приятностей!' },
     { top: '27%', left: '35%', text: '🌟', title: 'Успех', message: 'Пусть все сессии сдаются на отлично, а дедлайны не горят!' },
@@ -60,13 +60,13 @@ function openModal(title, text) {
 function closeModal() {
     document.getElementById('modal').style.display = 'none';
 }
-window.addEventListener('click', function(event) {   /* === ИЗМЕНЕНО: addEventListener === */
+window.addEventListener('click', function(event) {
     const modal = document.getElementById('modal');
     if (event.target === modal) closeModal();
 });
 
 // --- 3. Скретч-карты ---
-const scratchContainer = document.getElementById('scratchContainer');   /* === ИЗМЕНЕНО === */
+const scratchContainer = document.getElementById('scratchContainer');
 const scratchTexts = [
     'В новом году ты найдёшь ту самую вещь, которую искал весь год!',
     'Тебя ждёт спонтанная поездка, о которой ты не пожалеешь.',
@@ -118,7 +118,6 @@ scratchTexts.forEach((text) => {
         if (percentScratched > 45) {
             if (!canvas.classList.contains('scratched')) {
                 canvas.classList.add('scratched');
-                /* === ДОБАВЛЕНО: сообщаем extra-логике === */
                 document.dispatchEvent(new CustomEvent('scratchDone'));
             }
         }
@@ -148,7 +147,7 @@ scratchTexts.forEach((text) => {
         }
     };
 
-    canvas.addEventListener('contextmenu', (e) => e.preventDefault());   /* === ДОБАВЛЕНО === */
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
     canvas.addEventListener('mousedown', (e) => { isDrawing = true; erase(e); });
     canvas.addEventListener('mousemove', erase);
     canvas.addEventListener('mouseup', stopDrawing);
@@ -162,7 +161,7 @@ scratchTexts.forEach((text) => {
 });
 
 // --- 4. Бинго 3х3 ---
-const bingoGrid = document.getElementById('bingoGrid');   /* === ИЗМЕНЕНО === */
+const bingoGrid = document.getElementById('bingoGrid');
 const bingoItems = [
     'Выспаться', 'Не работать в выходные', 'Купить ту самую вещь',
     'Сходить в кино', 'Прочитать книгу', 'Начать бегать',
@@ -198,13 +197,9 @@ function checkBingo() {
     ];
     let hasBingo = false;
     for (let pattern of winPatterns) {
-        if (pattern.every(i => bingoState[i])) {
-            hasBingo = true;
-            break;
-        }
+        if (pattern.every(i => bingoState[i])) { hasBingo = true; break; }
     }
     document.getElementById('bingo-result').innerText = hasBingo ? '🎉 БИНГО! Ты выполнил линию! Так держать!' : '';
-    /* === ДОБАВЛЕНО: сообщаем extra-логике === */
     if (hasBingo) document.dispatchEvent(new CustomEvent('bingoWin'));
 }
 
@@ -248,7 +243,7 @@ function generatePrediction() {
 }
 
 // --- 6. Новогоднее Бинго ---
-const holidayBingo = document.getElementById('holidayBingo');   /* === ИЗМЕНЕНО === */
+const holidayBingo = document.getElementById('holidayBingo');
 const holidayItems = [
     'Оливье через силу', 'Гулял по украшенному городу', 'Тост на 5 минут', "Услышал песню Jingle Bells",
     'Потерянный носок', 'Подарок не по размеру', 'Салат "Шуба"', "Нарядил ёлку до 31 декабря",
@@ -265,7 +260,6 @@ holidayItems.forEach(item => {
     const toggle = () => {
         div.classList.toggle('active');
         div.setAttribute('aria-checked', String(div.classList.contains('active')));
-        /* === ДОБАВЛЕНО: сообщаем extra-логике === */
         document.dispatchEvent(new CustomEvent('holidayChanged', {
             detail: { activeCount: document.querySelectorAll('.holiday-item.active').length }
         }));
@@ -284,14 +278,12 @@ const movies = [
     '"Хроники Нарнии"', '"Гринч"', '"Властелин колец"', '"Дюна"', '"Матрица"', 
     '"Сияние"', '"Звездные войны"'
 ];
-
 const drinks = [
     'Глинтвейн', 'Какао с маршмеллоу', 'Чай с лимоном', 'Горячий шоколад', 'Кола со льдом', 
     'Имбирный чай с медом', 'Клюквенный морс', 'Облепиховый чай', 'Яблочный сидр', 
     'Виски с имбирным элем', 'Крепкая медовуха с перцем', 'Горячая сангрия с бренди', 
     'Ирландский кофе с виски', 'Водка', 'Шампанское', 'Ром', 'Джин'
 ];
-
 const activities = [
     'Заказать пиццу и не вставать с дивана', 'Укутаться в плед и смотреть сериал', 'Поиграть в настолки', 
     'Позвонить другу', 'Пойти гулять под снегом', 'Смотреть на падающий снег из окна', 
@@ -309,7 +301,7 @@ function generateEvening() {
 }
 
 // --- 8. Отправка формы через Formspree ---
-const form = document.getElementById('replyFormEl');   /* === ИЗМЕНЕНО === */
+const form = document.getElementById('replyFormEl');
 const successMsg = document.getElementById('successMsg');
 
 form.addEventListener('submit', function(e) {
@@ -324,7 +316,6 @@ form.addEventListener('submit', function(e) {
     }
 
     const formData = new FormData(form);
-    
     const submitBtn = form.querySelector('button');
     const originalBtnText = submitBtn.innerText;
     submitBtn.innerText = 'ОТПРАВКА...';
@@ -349,16 +340,14 @@ form.addEventListener('submit', function(e) {
             });
         }
     })
-    .catch(() => {
-        alert("Ошибка сети. Проверь подключение к интернету.");
-    })
+    .catch(() => alert("Ошибка сети. Проверь подключение к интернету."))
     .finally(() => {
         submitBtn.innerText = originalBtnText;
         submitBtn.disabled = false;
     });
 });
 
-// --- 9. Добавление декоративных HUD-элементов в секции ---
+// --- 9. Декоративные линии в секциях ---
 document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section');
     sections.forEach(section => {
@@ -374,324 +363,310 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// --- 10. Логика для левой панели (Кликер) ---
+// --- 10. Кликер ---
 let clicks = 0;
 const clickMessages = [
-    "Ну давай, еще разок!",
-    "Ого, ты быстрый!",
-    "Саша, ты рвешь шаблоны!",
-    "Твой палец как процессор!",
-    "Еще чуть-чуть до рекорда!",
-    "Клик-клик-клик!",
-    "Это лучший клик в твоей жизни!",
-    "Ты официально крут!",
-    "Не останавливайся!",
-    "Ого, да ты машина!"
+    "Ну давай, еще разок!", "Ого, ты быстрый!", "Саша, ты рвешь шаблоны!",
+    "Твой палец как процессор!", "Еще чуть-чуть до рекорда!", "Клик-клик-клик!",
+    "Это лучший клик в твоей жизни!", "Ты официально крут!", "Не останавливайся!", "Ого, да ты машина!"
 ];
 
 document.getElementById('clickerBtn').addEventListener('click', () => {
     clicks++;
     document.getElementById('clickCount').innerText = clicks;
-    
     if (clicks % 5 === 0 || clicks === 1) {
         const randomMsg = clickMessages[Math.floor(Math.random() * clickMessages.length)];
         document.getElementById('clickMessage').innerText = randomMsg;
     }
-    /* === ДОБАВЛЕНО: сообщаем extra-логике === */
     document.dispatchEvent(new CustomEvent('clickerTick', { detail: { clicks } }));
 });
 
-// --- 11. Логика для правой панели (Комплименты) ---
+// --- 11. Комплименты ---
 const compliments = [
-    "Ты лучший одногруппник в мире!",
-    "С тобой любой проект по плечу.",
-    "У тебя отличное чувство юмора!",
-    "Ты очень надежный друг.",
-    "Твой код всегда работает (почти).",
-    "Ты умеешь найти выход из любой ситуации.",
-    "С тобой всегда весело на парах.",
-    "Ты классный собеседник.",
-    "Все баги тебя боятся.",
-    "Ты крутой! Не забывай об этом.",
+    "Ты лучший одногруппник в мире!", "С тобой любой проект по плечу.",
+    "У тебя отличное чувство юмора!", "Ты очень надежный друг.",
+    "Твой код всегда работает (почти).", "Ты умеешь найти выход из любой ситуации.",
+    "С тобой всегда весело на парах.", "Ты классный собеседник.",
+    "Все баги тебя боятся.", "Ты крутой! Не забывай об этом.",
     "Пусть новый год принесет тебе только лучшее!"
 ];
 
 document.getElementById('complimentBtn').addEventListener('click', () => {
     const randomIndex = Math.floor(Math.random() * compliments.length);
     document.getElementById('complimentText').innerText = compliments[randomIndex];
-    /* === ДОБАВЛЕНО: сообщаем extra-логике === */
     document.dispatchEvent(new CustomEvent('complimentGot'));
 });
 
-// --- Функция для броска кубика (Левая колонка) ---
+// --- 12. Кубик ---
 function rollDice() {
     const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
     const randomFace = diceFaces[Math.floor(Math.random() * diceFaces.length)];
     document.getElementById('diceResult').innerText = randomFace;
-    /* === ДОБАВЛЕНО: сообщаем extra-логике === */
     document.dispatchEvent(new CustomEvent('diceRolled'));
 }
 
 /* ============================================================
-   === ДОБАВЛЕНО: РАСШИРЕНИЯ (звуки, параллакс, достижения,
-       прогресс-бар, темы, сохранение прогресса) ===
+   === ДОБАВЛЕНО: РАСШИРЕНИЯ (ТОЛЬКО ДЛЯ ПК) ===
+   Всё работает при ширине экрана >= 769px. На мобилках
+   и планшетах — только базовый функционал.
    ============================================================ */
-(function () {
-    'use strict';
+const isPC = window.matchMedia('(min-width: 769px)').matches;
 
-    /* ---------- ЗВУКИ (Web Audio API) ---------- */
-    let audioCtx = null;
-    let soundEnabled = true;
+if (isPC) {
+    (function () {
+        'use strict';
 
-    function getAudioCtx() {
-        if (!audioCtx) {
-            try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-            catch (e) { soundEnabled = false; }
+        /* ---------- ЗВУКИ ---------- */
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function getAudioCtx() {
+            if (!audioCtx) {
+                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+                catch (e) { soundEnabled = false; }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
         }
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-        return audioCtx;
-    }
 
-    function playTone(freq, duration, type = 'sine', volume = 0.08) {
-        if (!soundEnabled) return;
-        const ctx = getAudioCtx(); if (!ctx) return;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        gain.gain.setValueAtTime(volume, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(); osc.stop(ctx.currentTime + duration);
-    }
-
-    const playClick = () => playTone(880, 0.05, 'square', 0.05);
-    const playSuccess = () => { playTone(523.25,0.1); setTimeout(()=>playTone(659.25,0.1),80); setTimeout(()=>playTone(783.99,0.2),160); };
-    const playAchievement = () => { playTone(659.25,0.12); setTimeout(()=>playTone(783.99,0.12),100); setTimeout(()=>playTone(1046.5,0.25),200); };
-    const playDice = () => playTone(440, 0.06, 'triangle', 0.06);
-
-    /* Кнопка звука */
-    const soundBtn = document.getElementById('soundToggle');
-    if (soundBtn) {
-        soundBtn.addEventListener('click', () => {
-            soundEnabled = !soundEnabled;
-            soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
-            soundBtn.style.opacity = soundEnabled ? '1' : '0.5';
-            if (soundEnabled) playClick();
-        });
-    }
-
-    /* ---------- СОХРАНЕНИЕ ПРОГРЕССА ---------- */
-    const STORAGE_KEY = 'sasha_ny_progress_v1';
-    const defaultProgress = {
-        clicks: 0, diceRolls: 0, complimentsGot: 0,
-        scratchDone: 0, bingoLine: false, holidayChecked: 0,
-        openedSections: [], achievements: [], theme: 'gold'
-    };
-    let progress = loadProgress();
-
-    function loadProgress() {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return { ...defaultProgress };
-            return { ...defaultProgress, ...JSON.parse(raw) };
-        } catch (e) { return { ...defaultProgress }; }
-    }
-    function saveProgress() {
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
-    }
-
-    /* Восстановление кликера */
-    (function restoreClicks() {
-        const el = document.getElementById('clickCount');
-        if (el && progress.clicks > 0) {
-            el.innerText = progress.clicks;
-            // синхронизируем глобальную переменную clicks из script.js
-            clicks = progress.clicks;
+        function playTone(freq, duration, type = 'sine', volume = 0.08) {
+            if (!soundEnabled) return;
+            const ctx = getAudioCtx(); if (!ctx) return;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+            gain.gain.setValueAtTime(volume, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.start(); osc.stop(ctx.currentTime + duration);
         }
-    })();
 
-    /* Восстановление темы */
-    if (progress.theme && progress.theme !== 'gold') {
-        document.documentElement.setAttribute('data-theme', progress.theme);
-        document.querySelectorAll('.theme-btn').forEach(b => {
-            b.classList.toggle('active', b.dataset.theme === progress.theme);
-        });
-    }
+        const playClick = () => playTone(880, 0.05, 'square', 0.05);
+        const playSuccess = () => { playTone(523.25,0.1); setTimeout(()=>playTone(659.25,0.1),80); setTimeout(()=>playTone(783.99,0.2),160); };
+        const playAchievement = () => { playTone(659.25,0.12); setTimeout(()=>playTone(783.99,0.12),100); setTimeout(()=>playTone(1046.5,0.25),200); };
+        const playDice = () => playTone(440, 0.06, 'triangle', 0.06);
 
-    /* ---------- ПАРАЛЛАКС ---------- */
-    const decorLeft = document.querySelector('.bg-decor-left');
-    const decorRight = document.querySelector('.bg-decor-right');
-    let mouseX = 0, mouseY = 0, rafPending = false;
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-        if (!rafPending) { rafPending = true; requestAnimationFrame(applyParallax); }
-    });
-    function applyParallax() {
-        rafPending = false;
-        if (decorLeft)  decorLeft.style.transform  = `translate(${mouseX*25}px, ${mouseY*25}px) rotate(${mouseX*10}deg)`;
-        if (decorRight) decorRight.style.transform = `translate(${mouseX*-25}px, ${mouseY*-25}px) rotate(${mouseX*-10}deg)`;
-    }
-
-    /* ---------- ДОСТИЖЕНИЯ ---------- */
-    const ACHIEVEMENTS = [
-        { id: 'clicker10',   icon: '👆', title: 'Кликер-новичок',   desc: '10 кликов' },
-        { id: 'clicker100',  icon: '🔥', title: 'Кликер-мастер',    desc: '100 кликов' },
-        { id: 'scratchAll',  icon: '🎟️', title: 'Все карты стёрты', desc: 'Стёрты все скретч-карты' },
-        { id: 'bingoLine',   icon: '🎯', title: 'БИНГО!',           desc: 'Собрана линия' },
-        { id: 'holidayAll',  icon: '🎉', title: 'Новогодний марафон', desc: 'Отмечено 6+ пунктов бинго' },
-        { id: 'sectionsAll', icon: '📖', title: 'Всё изучено',      desc: 'Открыты все разделы' },
-        { id: 'dice10',      icon: '🎲', title: 'Кубик-мастер',     desc: '10 бросков кубика' },
-        { id: 'compliment5', icon: '💬', title: 'Приятно слышать',  desc: '5 комплиментов' }
-    ];
-
-    function unlockAchievement(id) {
-        if (progress.achievements.includes(id)) return;
-        progress.achievements.push(id);
-        saveProgress();
-        renderAchievements();
-        const a = ACHIEVEMENTS.find(x => x.id === id);
-        if (a) showAchievementToast(a);
-        playAchievement();
-    }
-
-    let toastTimeout = null;
-    function showAchievementToast(achievement) {
-        let toast = document.getElementById('achievementToast');
-        if (!toast) {
-            toast = document.createElement('div');
-            toast.id = 'achievementToast';
-            toast.className = 'achievement-toast';
-            toast.innerHTML = `
-                <div class="toast-icon"></div>
-                <div class="toast-text">
-                    <div class="toast-title">Достижение открыто!</div>
-                    <div class="toast-desc"></div>
-                </div>`;
-            document.body.appendChild(toast);
+        const soundBtn = document.getElementById('soundToggle');
+        if (soundBtn) {
+            soundBtn.addEventListener('click', () => {
+                soundEnabled = !soundEnabled;
+                soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
+                soundBtn.style.opacity = soundEnabled ? '1' : '0.5';
+                if (soundEnabled) playClick();
+            });
         }
-        toast.querySelector('.toast-icon').textContent = achievement.icon;
-        toast.querySelector('.toast-desc').textContent = `${achievement.title} — ${achievement.desc}`;
-        toast.classList.add('show');
-        clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
-    }
 
-    function renderAchievements() {
-        const bar = document.getElementById('achievementsBar');
-        if (!bar) return;
-        bar.innerHTML = '';
-        ACHIEVEMENTS.forEach(a => {
-            const badge = document.createElement('div');
-            badge.className = 'achievement-badge' + (progress.achievements.includes(a.id) ? ' unlocked' : '');
-            badge.textContent = a.icon;
-            badge.setAttribute('data-title', `${a.title} — ${a.desc}`);
-            badge.setAttribute('title', `${a.title}: ${a.desc}`);
-            bar.appendChild(badge);
+        /* ---------- localStorage ---------- */
+        const STORAGE_KEY = 'sasha_ny_progress_v1';
+        const defaultProgress = {
+            clicks: 0, diceRolls: 0, complimentsGot: 0,
+            scratchDone: 0, bingoLine: false, holidayChecked: 0,
+            openedSections: [], achievements: [], theme: 'gold'
+        };
+        let progress = loadProgress();
+
+        function loadProgress() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return { ...defaultProgress };
+                return { ...defaultProgress, ...JSON.parse(raw) };
+            } catch (e) { return { ...defaultProgress }; }
+        }
+        function saveProgress() {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
+        }
+
+        /* Восстановление кликера */
+        (function restoreClicks() {
+            const el = document.getElementById('clickCount');
+            if (el && progress.clicks > 0) {
+                el.innerText = progress.clicks;
+                clicks = progress.clicks;
+            }
+        })();
+
+        /* Восстановление темы */
+        if (progress.theme && progress.theme !== 'gold') {
+            document.documentElement.setAttribute('data-theme', progress.theme);
+            document.querySelectorAll('.theme-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.theme === progress.theme);
+            });
+        }
+
+        /* ---------- ПАРАЛЛАКС ---------- */
+        const decorLeft = document.querySelector('.bg-decor-left');
+        const decorRight = document.querySelector('.bg-decor-right');
+        let mouseX = 0, mouseY = 0, rafPending = false;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+            if (!rafPending) { rafPending = true; requestAnimationFrame(applyParallax); }
         });
-    }
-    renderAchievements();
+        function applyParallax() {
+            rafPending = false;
+            if (decorLeft)  decorLeft.style.transform  = `translate(${mouseX*25}px, ${mouseY*25}px) rotate(${mouseX*10}deg)`;
+            if (decorRight) decorRight.style.transform = `translate(${mouseX*-25}px, ${mouseY*-25}px) rotate(${mouseX*-10}deg)`;
+        }
 
-    /* ---------- ПРОГРЕСС-БАР ---------- */
-    const ALL_SECTIONS = ['tree', 'scratch-container', 'bingo-grid', 'prediction-result', 'holiday-bingo', 'evening-result', 'replyForm', 'hero-image-container'];
-    const progressTracker = document.getElementById('progressTracker');
-    const fill = progressTracker.querySelector('.tracker-bar-fill');
-    const label = progressTracker.querySelector('.tracker-count');
+        /* ---------- ДОСТИЖЕНИЯ ---------- */
+        const ACHIEVEMENTS = [
+            { id: 'clicker10',   icon: '👆', title: 'Кликер-новичок',   desc: '10 кликов' },
+            { id: 'clicker100',  icon: '🔥', title: 'Кликер-мастер',    desc: '100 кликов' },
+            { id: 'scratchAll',  icon: '🎟️', title: 'Все карты стёрты', desc: 'Стёрты все скретч-карты' },
+            { id: 'bingoLine',   icon: '🎯', title: 'БИНГО!',           desc: 'Собрана линия' },
+            { id: 'holidayAll',  icon: '🎉', title: 'Новогодний марафон', desc: 'Отмечено 6+ пунктов бинго' },
+            { id: 'sectionsAll', icon: '📖', title: 'Всё изучено',      desc: 'Открыты все разделы' },
+            { id: 'dice10',      icon: '🎲', title: 'Кубик-мастер',     desc: '10 бросков кубика' },
+            { id: 'compliment5', icon: '💬', title: 'Приятно слышать',  desc: '5 комплиментов' }
+        ];
 
-    function updateProgressTracker() {
-        const count = progress.openedSections.length;
-        const total = ALL_SECTIONS.length;
-        fill.style.width = (count / total * 100) + '%';
-        label.textContent = `${count}/${total}`;
-        if (count === total) unlockAchievement('sectionsAll');
-    }
-
-    function markSectionOpened(id) {
-        if (!progress.openedSections.includes(id)) {
-            progress.openedSections.push(id);
+        function unlockAchievement(id) {
+            if (progress.achievements.includes(id)) return;
+            progress.achievements.push(id);
             saveProgress();
-            updateProgressTracker();
+            renderAchievements();
+            const a = ACHIEVEMENTS.find(x => x.id === id);
+            if (a) showAchievementToast(a);
+            playAchievement();
         }
-    }
 
-    const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const id = entry.target.id || entry.target.dataset.sectionId;
-                if (id && ALL_SECTIONS.includes(id)) markSectionOpened(id);
+        let toastTimeout = null;
+        function showAchievementToast(achievement) {
+            let toast = document.getElementById('achievementToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'achievementToast';
+                toast.className = 'achievement-toast';
+                toast.innerHTML = `
+                    <div class="toast-icon"></div>
+                    <div class="toast-text">
+                        <div class="toast-title">Достижение открыто!</div>
+                        <div class="toast-desc"></div>
+                    </div>`;
+                document.body.appendChild(toast);
+            }
+            toast.querySelector('.toast-icon').textContent = achievement.icon;
+            toast.querySelector('.toast-desc').textContent = `${achievement.title} — ${achievement.desc}`;
+            toast.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        function renderAchievements() {
+            const bar = document.getElementById('achievementsBar');
+            if (!bar) return;
+            bar.innerHTML = '';
+            ACHIEVEMENTS.forEach(a => {
+                const badge = document.createElement('div');
+                badge.className = 'achievement-badge' + (progress.achievements.includes(a.id) ? ' unlocked' : '');
+                badge.textContent = a.icon;
+                badge.setAttribute('data-title', `${a.title} — ${a.desc}`);
+                badge.setAttribute('title', `${a.title}: ${a.desc}`);
+                bar.appendChild(badge);
+            });
+        }
+        renderAchievements();
+
+        /* ---------- ПРОГРЕСС-БАР ---------- */
+        const ALL_SECTIONS = ['tree', 'scratch-container', 'bingo-grid', 'prediction-result', 'holiday-bingo', 'evening-result', 'replyForm', 'hero-image-container'];
+        const progressTracker = document.getElementById('progressTracker');
+        const fill = progressTracker.querySelector('.tracker-bar-fill');
+        const label = progressTracker.querySelector('.tracker-count');
+
+        function updateProgressTracker() {
+            const count = progress.openedSections.length;
+            const total = ALL_SECTIONS.length;
+            fill.style.width = (count / total * 100) + '%';
+            label.textContent = `${count}/${total}`;
+            if (count === total) unlockAchievement('sectionsAll');
+        }
+
+        function markSectionOpened(id) {
+            if (!progress.openedSections.includes(id)) {
+                progress.openedSections.push(id);
+                saveProgress();
+                updateProgressTracker();
+            }
+        }
+
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id || entry.target.dataset.sectionId;
+                    if (id && ALL_SECTIONS.includes(id)) markSectionOpened(id);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        ALL_SECTIONS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) io.observe(el);
+        });
+        updateProgressTracker();
+
+        /* ---------- СВЯЗКА С БАЗОВЫМИ СОБЫТИЯМИ ---------- */
+        document.addEventListener('clickerTick', (e) => {
+            playClick();
+            progress.clicks = e.detail.clicks;
+            if (progress.clicks >= 10) unlockAchievement('clicker10');
+            if (progress.clicks >= 100) unlockAchievement('clicker100');
+            saveProgress();
+        });
+
+        document.addEventListener('complimentGot', () => {
+            playClick();
+            progress.complimentsGot++;
+            if (progress.complimentsGot >= 5) unlockAchievement('compliment5');
+            saveProgress();
+        });
+
+        document.addEventListener('diceRolled', () => {
+            playDice();
+            progress.diceRolls++;
+            if (progress.diceRolls >= 10) unlockAchievement('dice10');
+            saveProgress();
+        });
+
+        document.addEventListener('scratchDone', () => {
+            const done = document.querySelectorAll('.scratch-card canvas.scratched').length;
+            if (done > progress.scratchDone) {
+                progress.scratchDone = done;
+                saveProgress();
+                playSuccess();
+                if (done === document.querySelectorAll('.scratch-card').length) unlockAchievement('scratchAll');
             }
         });
-    }, { threshold: 0.3 });
 
-    ALL_SECTIONS.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) io.observe(el);
-    });
-    updateProgressTracker();
-
-    /* ---------- СВЯЗКА СО СТАРЫМИ ЭЛЕМЕНТАМИ (звуки + прогресс) ---------- */
-
-    document.addEventListener('clickerTick', (e) => {
-        playClick();
-        progress.clicks = e.detail.clicks;
-        if (progress.clicks >= 10) unlockAchievement('clicker10');
-        if (progress.clicks >= 100) unlockAchievement('clicker100');
-        saveProgress();
-    });
-
-    document.addEventListener('complimentGot', () => {
-        playClick();
-        progress.complimentsGot++;
-        if (progress.complimentsGot >= 5) unlockAchievement('compliment5');
-        saveProgress();
-    });
-
-    document.addEventListener('diceRolled', () => {
-        playDice();
-        progress.diceRolls++;
-        if (progress.diceRolls >= 10) unlockAchievement('dice10');
-        saveProgress();
-    });
-
-    document.addEventListener('scratchDone', () => {
-        const done = document.querySelectorAll('.scratch-card canvas.scratched').length;
-        if (done > progress.scratchDone) {
-            progress.scratchDone = done;
-            saveProgress();
-            playSuccess();
-            if (done === document.querySelectorAll('.scratch-card').length) unlockAchievement('scratchAll');
-        }
-    });
-
-    document.addEventListener('bingoWin', () => {
-        if (!progress.bingoLine) {
-            progress.bingoLine = true;
-            saveProgress();
-            playSuccess();
-            unlockAchievement('bingoLine');
-        }
-    });
-
-    document.addEventListener('holidayChanged', (e) => {
-        playClick();
-        progress.holidayChecked = e.detail.activeCount;
-        saveProgress();
-        if (e.detail.activeCount >= 6) unlockAchievement('holidayAll');
-    });
-
-    /* ---------- ПЕРЕКЛЮЧАТЕЛЬ ТЕМ ---------- */
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const t = btn.dataset.theme;
-            document.documentElement.setAttribute('data-theme', t);
-            progress.theme = t;
-            saveProgress();
-            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            playClick();
+        document.addEventListener('bingoWin', () => {
+            if (!progress.bingoLine) {
+                progress.bingoLine = true;
+                saveProgress();
+                playSuccess();
+                unlockAchievement('bingoLine');
+            }
         });
-    });
 
-})();
+        document.addEventListener('holidayChanged', (e) => {
+            playClick();
+            progress.holidayChecked = e.detail.activeCount;
+            saveProgress();
+            if (e.detail.activeCount >= 6) unlockAchievement('holidayAll');
+        });
+
+        /* ---------- ПЕРЕКЛЮЧАТЕЛЬ ТЕМ ---------- */
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const t = btn.dataset.theme;
+                document.documentElement.setAttribute('data-theme', t);
+                progress.theme = t;
+                saveProgress();
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                playClick();
+            });
+        });
+
+    })();
+}
