@@ -14,6 +14,25 @@
     
     <div id="snow-container"></div>
 
+    <!-- === ДОБАВЛЕНО: переключатель тем === -->
+    <div class="theme-switcher" id="themeSwitcher" role="group" aria-label="Выбор темы оформления">
+        <button class="theme-btn active" data-theme="gold" title="Золото/неон" aria-label="Тема: Золото"></button>
+        <button class="theme-btn" data-theme="ice" title="Ледяная" aria-label="Тема: Ледяная"></button>
+        <button class="theme-btn" data-theme="classic" title="Классика" aria-label="Тема: Классика"></button>
+        <button class="theme-btn" data-theme="terminal" title="Терминал" aria-label="Тема: Терминал"></button>
+    </div>
+
+    <!-- === ДОБАВЛЕНО: прогресс-бар открытых разделов === -->
+    <div class="progress-tracker" id="progressTracker">
+        <div class="tracker-label">
+            <span>📊 Прогресс</span>
+            <span class="tracker-count">0/8</span>
+        </div>
+        <div class="tracker-bar-bg">
+            <div class="tracker-bar-fill"></div>
+        </div>
+    </div>
+
     <div class="container">
 
          <!-- ОСНОВНАЯ СЕТКА -->
@@ -53,54 +72,54 @@
             </div>
         </aside>
 
-        <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА (Твои основные блоки) -->
+        <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА -->
         <main class="main-content">
             <h1>С Новым Годом, Саша!</h1>
             
-            <div class="hero-image-container">
+            <div class="hero-image-container" id="hero-image-container" data-section-id="hero-image-container">
                 <img src="sasha.png" alt="Саша" class="hero-image">
             </div>
 
-            <section>
+            <section id="tree" data-section-id="tree">
                 <h2>🎄 Виртуальная Ёлка</h2>
                 <p>Нажми на светящиеся шары, чтобы получить послание.</p>
-                <div class="tree-container" id="tree"></div>
+                <div class="tree-container" id="treeContainer"></div>
             </section>
 
-            <section>
+            <section id="scratch-container" data-section-id="scratch-container">
                 <h2>🎟️ Скретч-карты</h2>
                 <p>Сотри защитный слой мышкой (или пальцем), чтобы узнать предсказание!</p>
-                <div class="scratch-container" id="scratch-container"></div>
+                <div class="scratch-container" id="scratchContainer"></div>
             </section>
 
-            <section>
+            <section id="bingo-grid" data-section-id="bingo-grid">
                 <h2>🎯 Бинго Новогодних Обещаний</h2>
                 <p>Кликай по клеткам, которые ты обещаешь выполнить. Собери линию!</p>
-                <div class="bingo-grid" id="bingo-grid"></div>
+                <div class="bingo-grid" id="bingoGrid"></div>
                 <div id="bingo-result" class="result-box"></div>
             </section>
 
-            <section>
+            <section id="prediction-result" data-section-id="prediction-result">
                 <h2>🔮 Предсказание на год</h2>
                 <p>Нажми на кнопку, чтобы узнать, что тебя ждёт в новом году.</p>
                 <button class="btn" onclick="generatePrediction()">Узнать, что тебя ждёт!</button>
-                <div id="prediction-result" class="result-box"></div>
+                <div id="predictionResult" class="result-box"></div>
             </section>
 
-            <section>
+            <section id="holiday-bingo" data-section-id="holiday-bingo">
                 <h2>🎉 Новогоднее Бинго</h2>
                 <p>Отметь, что уже случилось с тобой в этом году:</p>
-                <div class="holiday-bingo" id="holiday-bingo"></div>
+                <div class="holiday-bingo" id="holidayBingo"></div>
             </section>
 
-            <section>
+            <section id="evening-result" data-section-id="evening-result">
                 <h2>🍿 Идеальный зимний вечер</h2>
                 <p>Не знаешь, чем заняться? Нажми на кнопку!</p>
                 <button class="btn" onclick="generateEvening()">Сгенерировать вечер</button>
-                <div id="evening-result" class="result-box"></div>
+                <div id="eveningResult" class="result-box"></div>
             </section>
 
-            <section>
+            <section id="replyForm" data-section-id="replyForm">
                 <h2>💌 Личное поздравление</h2>
                 <div class="personal-message-display">
 Дорогой Саша! 
@@ -109,7 +128,7 @@
                 
                 <p style="text-align:center; margin-bottom: 20px;">А теперь твой ход! Напиши мне ответ:</p>
                 
-                <form id="replyForm" class="reply-form" action="https://formspree.io/f/myeelzqp" method="POST">
+                <form id="replyFormEl" class="reply-form" action="https://formspree.io/f/myeelzqp" method="POST">
                     <input type="hidden" name="_subject" value="Новый ответ с новогоднего сайта! 🎄">
                     <input type="hidden" name="_captcha" value="false">
                     <input type="hidden" name="_template" value="table">
@@ -172,6 +191,12 @@
             <p id="modal-text"></p>
         </div>
     </div>
+
+    <!-- === ДОБАВЛЕНО: кнопка звука === -->
+    <button id="soundToggle" class="sound-toggle" aria-label="Переключить звук" title="Звук вкл/выкл">🔊</button>
+
+    <!-- === ДОБАВЛЕНО: контейнер для достижений (наполняется JS) === -->
+    <div class="achievements-bar" id="achievementsBar" aria-label="Достижения"></div>
 
     <script src="script.js"></script>
 </body>
