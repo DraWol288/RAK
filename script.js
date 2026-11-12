@@ -25,7 +25,8 @@ function createSnow() {
 createSnow();
 
 // --- 2. Ёлка с шарами ---
-const tree = document.getElementById('treeContainer');
+// ВАЖНО: используем treeContainer, так как id="tree" теперь у секции (для прогресс-бара)
+const tree = document.getElementById('treeContainer'); 
 const ornamentsData = [
     { top: '13%', left: '47%', text: '🎁', title: 'Подарок!', message: 'Саша, желаю тебе в новом году кучу крутых подарков и неожиданных приятностей!' },
     { top: '27%', left: '35%', text: '🌟', title: 'Успех', message: 'Пусть все сессии сдаются на отлично, а дедлайны не горят!' },
@@ -36,35 +37,24 @@ const ornamentsData = [
     { top: '79%', left: '36%', text: '🚀', title: 'Рост', message: 'Пусть новый год принесет тебе много новых возможностей и крутых знакомств!' }
 ];
 
-ornamentsData.forEach((data) => {
-    const orn = document.createElement('div');
-    orn.classList.add('ornament');
-    orn.style.top = data.top;
-    orn.style.left = data.left;
-    orn.innerText = data.text;
-    orn.setAttribute('tabindex', '0');
-    orn.setAttribute('role', 'button');
-    orn.setAttribute('aria-label', data.title);
-    orn.onclick = () => openModal(data.title, data.message);
-    orn.onkeydown = (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(data.title, data.message); }
-    };
-    tree.appendChild(orn);
-});
-
-function openModal(title, text) {
-    document.getElementById('modal-title').innerText = title;
-    document.getElementById('modal-text').innerText = text;
-    document.getElementById('modal').style.display = 'flex';
+// Если контейнер найден — добавляем шары
+if (tree) {
+    ornamentsData.forEach((data) => {
+        const orn = document.createElement('div');
+        orn.classList.add('ornament');
+        orn.style.top = data.top;
+        orn.style.left = data.left;
+        orn.innerText = data.text;
+        orn.setAttribute('tabindex', '0');
+        orn.setAttribute('role', 'button');
+        orn.setAttribute('aria-label', data.title);
+        orn.onclick = () => openModal(data.title, data.message);
+        orn.onkeydown = (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(data.title, data.message); }
+        };
+        tree.appendChild(orn);
+    });
 }
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-}
-window.addEventListener('click', function(event) {
-    const modal = document.getElementById('modal');
-    if (event.target === modal) closeModal();
-});
-
 // --- 3. Скретч-карты ---
 const scratchContainer = document.getElementById('scratchContainer');
 const scratchTexts = [
