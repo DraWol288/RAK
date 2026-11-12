@@ -758,6 +758,15 @@ button:focus-visible, .btn:focus-visible, .bingo-cell:focus-visible, .holiday-it
     .tilt-card > * { transform: translateZ(20px); }
 }
 
+/* Защита: шары на ёлке не должны плющиться от 3D-наклона */
+.tilt-card .ornament,
+.ornament {
+    transform: none !important; /* Сбрасываем 3D-трансформацию */
+}
+.tilt-card .ornament:hover {
+    transform: scale(1.2) !important; /* Возвращаем эффект увеличения при наведении */
+}
+
 @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
 h1 {
