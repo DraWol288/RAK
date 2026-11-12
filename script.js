@@ -25,7 +25,6 @@ function createSnow() {
 createSnow();
 
 // --- 2. Ёлка с шарами ---
-// ВАЖНО: используем treeContainer, так как id="tree" теперь у секции (для прогресс-бара)
 const tree = document.getElementById('treeContainer'); 
 const ornamentsData = [
     { top: '13%', left: '47%', text: '🎁', title: 'Подарок!', message: 'Саша, желаю тебе в новом году кучу крутых подарков и неожиданных приятностей!' },
@@ -37,7 +36,6 @@ const ornamentsData = [
     { top: '79%', left: '36%', text: '🚀', title: 'Рост', message: 'Пусть новый год принесет тебе много новых возможностей и крутых знакомств!' }
 ];
 
-// Если контейнер найден — добавляем шары
 if (tree) {
     ornamentsData.forEach((data) => {
         const orn = document.createElement('div');
@@ -55,6 +53,24 @@ if (tree) {
         tree.appendChild(orn);
     });
 }
+
+// === ДОБАВЛЕНО: Недостающие функции для модального окна ===
+function openModal(title, text) {
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-text').innerText = text;
+    document.getElementById('modal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('modal');
+    if (event.target === modal) closeModal();
+});
+// =======================================================
+
 // --- 3. Скретч-карты ---
 const scratchContainer = document.getElementById('scratchContainer');
 const scratchTexts = [
@@ -294,48 +310,50 @@ function generateEvening() {
 const form = document.getElementById('replyFormEl');
 const successMsg = document.getElementById('successMsg');
 
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const nameInput = document.getElementById('senderName');
-    const messageInput = document.getElementById('replyMessage');
-    
-    if (nameInput.value.trim() === '' || messageInput.value.trim() === '') {
-        alert('Пожалуйста, заполни Имя и Сообщение! Пустые поля отправить нельзя.');
-        return;
-    }
-
-    const formData = new FormData(form);
-    const submitBtn = form.querySelector('button');
-    const originalBtnText = submitBtn.innerText;
-    submitBtn.innerText = 'ОТПРАВКА...';
-    submitBtn.disabled = true;
-
-    fetch('https://formspree.io/f/myeelzqp', { 
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-    })
-    .then(response => {
-        if (response.ok) {
-            form.style.display = 'none'; 
-            successMsg.style.display = 'block'; 
-        } else {
-            response.json().then(data => {
-                if (Object.hasOwn(data, 'errors')) {
-                    alert(data["errors"].map(error => error["message"]).join(", "));
-                } else {
-                    alert("Ошибка при отправке. Попробуй еще раз.");
-                }
-            });
+if(form) {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const nameInput = document.getElementById('senderName');
+        const messageInput = document.getElementById('replyMessage');
+        
+        if (nameInput.value.trim() === '' || messageInput.value.trim() === '') {
+            alert('Пожалуйста, заполни Имя и Сообщение! Пустые поля отправить нельзя.');
+            return;
         }
-    })
-    .catch(() => alert("Ошибка сети. Проверь подключение к интернету."))
-    .finally(() => {
-        submitBtn.innerText = originalBtnText;
-        submitBtn.disabled = false;
+
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector('button');
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.innerText = 'ОТПРАВКА...';
+        submitBtn.disabled = true;
+
+        fetch('https://formspree.io/f/myeelzqp', { 
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(response => {
+            if (response.ok) {
+                form.style.display = 'none'; 
+                successMsg.style.display = 'block'; 
+            } else {
+                response.json().then(data => {
+                    if (Object.hasOwn(data, 'errors')) {
+                        alert(data["errors"].map(error => error["message"]).join(", "));
+                    } else {
+                        alert("Ошибка при отправке. Попробуй еще раз.");
+                    }
+                });
+            }
+        })
+        .catch(() => alert("Ошибка сети. Проверь подключение к интернету."))
+        .finally(() => {
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
+        });
     });
-});
+}
 
 // --- 9. Декоративные линии в секциях ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -361,15 +379,18 @@ const clickMessages = [
     "Это лучший клик в твоей жизни!", "Ты официально крут!", "Не останавливайся!", "Ого, да ты машина!"
 ];
 
-document.getElementById('clickerBtn').addEventListener('click', () => {
-    clicks++;
-    document.getElementById('clickCount').innerText = clicks;
-    if (clicks % 5 === 0 || clicks === 1) {
-        const randomMsg = clickMessages[Math.floor(Math.random() * clickMessages.length)];
-        document.getElementById('clickMessage').innerText = randomMsg;
-    }
-    document.dispatchEvent(new CustomEvent('clickerTick', { detail: { clicks } }));
-});
+const clickerBtn = document.getElementById('clickerBtn');
+if(clickerBtn) {
+    clickerBtn.addEventListener('click', () => {
+        clicks++;
+        document.getElementById('clickCount').innerText = clicks;
+        if (clicks % 5 === 0 || clicks === 1) {
+            const randomMsg = clickMessages[Math.floor(Math.random() * clickMessages.length)];
+            document.getElementById('clickMessage').innerText = randomMsg;
+        }
+        document.dispatchEvent(new CustomEvent('clickerTick', { detail: { clicks } }));
+    });
+}
 
 // --- 11. Комплименты ---
 const compliments = [
@@ -381,11 +402,14 @@ const compliments = [
     "Пусть новый год принесет тебе только лучшее!"
 ];
 
-document.getElementById('complimentBtn').addEventListener('click', () => {
-    const randomIndex = Math.floor(Math.random() * compliments.length);
-    document.getElementById('complimentText').innerText = compliments[randomIndex];
-    document.dispatchEvent(new CustomEvent('complimentGot'));
-});
+const complimentBtn = document.getElementById('complimentBtn');
+if(complimentBtn) {
+    complimentBtn.addEventListener('click', () => {
+        const randomIndex = Math.floor(Math.random() * compliments.length);
+        document.getElementById('complimentText').innerText = compliments[randomIndex];
+        document.dispatchEvent(new CustomEvent('complimentGot'));
+    });
+}
 
 // --- 12. Кубик ---
 function rollDice() {
@@ -396,9 +420,7 @@ function rollDice() {
 }
 
 /* ============================================================
-   === ДОБАВЛЕНО: РАСШИРЕНИЯ (ТОЛЬКО ДЛЯ ПК) ===
-   Всё работает при ширине экрана >= 769px. На мобилках
-   и планшетах — только базовый функционал.
+   === РАСШИРЕНИЯ (ТОЛЬКО ДЛЯ ПК) ===
    ============================================================ */
 const isPC = window.matchMedia('(min-width: 769px)').matches;
 
@@ -562,39 +584,41 @@ if (isPC) {
         /* ---------- ПРОГРЕСС-БАР ---------- */
         const ALL_SECTIONS = ['tree', 'scratch-container', 'bingo-grid', 'prediction-result', 'holiday-bingo', 'evening-result', 'replyForm', 'hero-image-container'];
         const progressTracker = document.getElementById('progressTracker');
-        const fill = progressTracker.querySelector('.tracker-bar-fill');
-        const label = progressTracker.querySelector('.tracker-count');
+        if (progressTracker) {
+            const fill = progressTracker.querySelector('.tracker-bar-fill');
+            const label = progressTracker.querySelector('.tracker-count');
 
-        function updateProgressTracker() {
-            const count = progress.openedSections.length;
-            const total = ALL_SECTIONS.length;
-            fill.style.width = (count / total * 100) + '%';
-            label.textContent = `${count}/${total}`;
-            if (count === total) unlockAchievement('sectionsAll');
-        }
-
-        function markSectionOpened(id) {
-            if (!progress.openedSections.includes(id)) {
-                progress.openedSections.push(id);
-                saveProgress();
-                updateProgressTracker();
+            function updateProgressTracker() {
+                const count = progress.openedSections.length;
+                const total = ALL_SECTIONS.length;
+                fill.style.width = (count / total * 100) + '%';
+                label.textContent = `${count}/${total}`;
+                if (count === total) unlockAchievement('sectionsAll');
             }
-        }
 
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.id || entry.target.dataset.sectionId;
-                    if (id && ALL_SECTIONS.includes(id)) markSectionOpened(id);
+            function markSectionOpened(id) {
+                if (!progress.openedSections.includes(id)) {
+                    progress.openedSections.push(id);
+                    saveProgress();
+                    updateProgressTracker();
                 }
-            });
-        }, { threshold: 0.3 });
+            }
 
-        ALL_SECTIONS.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) io.observe(el);
-        });
-        updateProgressTracker();
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id || entry.target.dataset.sectionId;
+                        if (id && ALL_SECTIONS.includes(id)) markSectionOpened(id);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            ALL_SECTIONS.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) io.observe(el);
+            });
+            updateProgressTracker();
+        }
 
         /* ---------- СВЯЗКА С БАЗОВЫМИ СОБЫТИЯМИ ---------- */
         document.addEventListener('clickerTick', (e) => {
@@ -662,12 +686,7 @@ if (isPC) {
 }
 
 /* ============================================================
-   === ДОБАВЛЕНО: ВИЗУАЛЬНЫЕ УЛУЧШЕНИЯ ===
-   1. Неоновое свечение за курсором (ПК)
-   2. 3D-наклон карточек (ПК)
-   3. Анимированный градиент заголовка (CSS — уже в стилях)
-   4. Курсор-шлейф (ПК)
-   5. Риппл-эффект (все устройства)
+   === ВИЗУАЛЬНЫЕ УЛУЧШЕНИЯ ===
    ============================================================ */
 (function () {
     'use strict';
@@ -675,9 +694,7 @@ if (isPC) {
     const isPC = window.matchMedia('(min-width: 769px)').matches;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* -----------------------------------------------------------
-       1. НЕОНОВОЕ СВЕЧЕНИЕ ЗА КУРСОРОМ (только ПК)
-       ----------------------------------------------------------- */
+    /* 1. НЕОНОВОЕ СВЕЧЕНИЕ ЗА КУРСОРОМ */
     if (isPC && !reduceMotion) {
         const glow = document.createElement('div');
         glow.id = 'cursorGlow';
@@ -686,7 +703,6 @@ if (isPC) {
         let gx = 0, gy = 0, tx = 0, ty = 0, glowRaf = null;
 
         function animateGlow() {
-            // Плавное «догоняние» курсора (easing)
             gx += (tx - gx) * 0.18;
             gy += (ty - gy) * 0.18;
             glow.style.transform = `translate(${gx}px, ${gy}px) translate(-50%, -50%)`;
@@ -704,14 +720,11 @@ if (isPC) {
             if (!glowRaf) glowRaf = requestAnimationFrame(animateGlow);
         });
 
-        // Скрываем, когда мышь уходит со страницы
         document.addEventListener('mouseleave', () => glow.classList.remove('active'));
         document.addEventListener('mouseenter', () => glow.classList.add('active'));
     }
 
-    /* -----------------------------------------------------------
-       2. 3D-НАКЛОН КАРТОЧЕК (только ПК)
-       ----------------------------------------------------------- */
+    /* 2. 3D-НАКЛОН КАРТОЧЕК */
     if (isPC && !reduceMotion) {
         const TILT_SELECTOR = [
             '.side-widget',
@@ -722,7 +735,7 @@ if (isPC) {
             '.hero-image-container'
         ].join(', ');
 
-        const MAX_TILT = 6; // градусов
+        const MAX_TILT = 6;
 
         document.querySelectorAll(TILT_SELECTOR).forEach(card => {
             card.classList.add('tilt-card');
@@ -739,16 +752,13 @@ if (isPC) {
                         const rect = card.getBoundingClientRect();
                         const x = lastEvent.clientX - rect.left;
                         const y = lastEvent.clientY - rect.top;
-                        const px = x / rect.width;   // 0..1
-                        const py = y / rect.height;  // 0..1
+                        const px = x / rect.width;
+                        const py = y / rect.height;
 
-                        const rotateY = (px - 0.5) * 2 * MAX_TILT;   // -MAX..MAX
+                        const rotateY = (px - 0.5) * 2 * MAX_TILT;
                         const rotateX = -(py - 0.5) * 2 * MAX_TILT;
 
-                        card.style.transform =
-                            `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-
-                        // Блик следует за курсором
+                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                         card.style.setProperty('--mx', (px * 100) + '%');
                         card.style.setProperty('--my', (py * 100) + '%');
                     });
@@ -757,16 +767,13 @@ if (isPC) {
 
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-                // сбрасываем блик в центр
                 card.style.setProperty('--mx', '50%');
                 card.style.setProperty('--my', '50%');
             });
         });
     }
 
-    /* -----------------------------------------------------------
-       3. КУРСОР-ШЛЕЙФ (только ПК)
-       ----------------------------------------------------------- */
+    /* 3. КУРСОР-ШЛЕЙФ */
     if (isPC && !reduceMotion) {
         const canvas = document.createElement('canvas');
         canvas.id = 'trailCanvas';
@@ -784,7 +791,6 @@ if (isPC) {
         const MAX_PARTICLES = 40;
         const PALETTE_GOLD = ['#ffcc00', '#ff8c00', '#fff3e0', '#d97736'];
 
-        // Цвета зависят от темы
         function getPalette() {
             const t = document.documentElement.getAttribute('data-theme') || 'gold';
             if (t === 'ice')     return ['#7dd3fc', '#38bdf8', '#e0f2fe', '#0ea5e9'];
@@ -804,7 +810,6 @@ if (isPC) {
             lastX = e.clientX;
             lastY = e.clientY;
 
-            // Спавним частицы пропорционально скорости движения
             const speed = Math.hypot(mouseVX, mouseVY);
             const spawnCount = Math.min(3, 1 + Math.floor(speed / 15));
 
@@ -834,7 +839,7 @@ if (isPC) {
                 const p = particles[i];
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.04;       // лёгкая гравитация
+                p.vy += 0.04;
                 p.vx *= 0.97;
                 p.vy *= 0.97;
                 p.life -= p.decay;
@@ -860,9 +865,7 @@ if (isPC) {
         drawTrail();
     }
 
-    /* -----------------------------------------------------------
-       4. РИППЛ-ЭФФЕКТ (все устройства)
-       ----------------------------------------------------------- */
+    /* 4. РИППЛ-ЭФФЕКТ */
     function addRipple(e) {
         const target = e.currentTarget;
         const rect = target.getBoundingClientRect();
@@ -880,7 +883,6 @@ if (isPC) {
         setTimeout(() => ripple.remove(), 650);
     }
 
-    // Вешаем риппл на все «кликабельные» элементы
     const RIPPLE_SELECTOR = [
         '.btn',
         'button:not(.theme-btn):not(.sound-toggle)',
@@ -897,9 +899,7 @@ if (isPC) {
             el.addEventListener('click', addRipple);
         });
     }
-    // Инициализация + повторная (элементы создаются динамически)
     initRipple();
-    // Наблюдаем за DOM, чтобы навешивать риппл на новые кнопки
     const rippleObserver = new MutationObserver(() => initRipple());
     rippleObserver.observe(document.body, { childList: true, subtree: true });
 
