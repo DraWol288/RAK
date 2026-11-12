@@ -670,3 +670,247 @@ if (isPC) {
 
     })();
 }
+
+/* ============================================================
+   === ДОБАВЛЕНО: ВИЗУАЛЬНЫЕ УЛУЧШЕНИЯ ===
+   1. Неоновое свечение за курсором (ПК)
+   2. 3D-наклон карточек (ПК)
+   3. Анимированный градиент заголовка (CSS — уже в стилях)
+   4. Курсор-шлейф (ПК)
+   5. Риппл-эффект (все устройства)
+   ============================================================ */
+(function () {
+    'use strict';
+
+    const isPC = window.matchMedia('(min-width: 769px)').matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* -----------------------------------------------------------
+       1. НЕОНОВОЕ СВЕЧЕНИЕ ЗА КУРСОРОМ (только ПК)
+       ----------------------------------------------------------- */
+    if (isPC && !reduceMotion) {
+        const glow = document.createElement('div');
+        glow.id = 'cursorGlow';
+        document.body.appendChild(glow);
+
+        let gx = 0, gy = 0, tx = 0, ty = 0, glowRaf = null;
+
+        function animateGlow() {
+            // Плавное «догоняние» курсора (easing)
+            gx += (tx - gx) * 0.18;
+            gy += (ty - gy) * 0.18;
+            glow.style.transform = `translate(${gx}px, ${gy}px) translate(-50%, -50%)`;
+            if (Math.abs(tx - gx) > 0.5 || Math.abs(ty - gy) > 0.5) {
+                glowRaf = requestAnimationFrame(animateGlow);
+            } else {
+                glowRaf = null;
+            }
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            tx = e.clientX;
+            ty = e.clientY;
+            glow.classList.add('active');
+            if (!glowRaf) glowRaf = requestAnimationFrame(animateGlow);
+        });
+
+        // Скрываем, когда мышь уходит со страницы
+        document.addEventListener('mouseleave', () => glow.classList.remove('active'));
+        document.addEventListener('mouseenter', () => glow.classList.add('active'));
+    }
+
+    /* -----------------------------------------------------------
+       2. 3D-НАКЛОН КАРТОЧЕК (только ПК)
+       ----------------------------------------------------------- */
+    if (isPC && !reduceMotion) {
+        const TILT_SELECTOR = [
+            '.side-widget',
+            'section',
+            '.scratch-card',
+            '.bingo-cell',
+            '.holiday-item',
+            '.hero-image-container'
+        ].join(', ');
+
+        const MAX_TILT = 6; // градусов
+
+        document.querySelectorAll(TILT_SELECTOR).forEach(card => {
+            card.classList.add('tilt-card');
+
+            let rafId = null;
+            let lastEvent = null;
+
+            card.addEventListener('mousemove', (e) => {
+                lastEvent = e;
+                if (!rafId) {
+                    rafId = requestAnimationFrame(() => {
+                        rafId = null;
+                        if (!lastEvent) return;
+                        const rect = card.getBoundingClientRect();
+                        const x = lastEvent.clientX - rect.left;
+                        const y = lastEvent.clientY - rect.top;
+                        const px = x / rect.width;   // 0..1
+                        const py = y / rect.height;  // 0..1
+
+                        const rotateY = (px - 0.5) * 2 * MAX_TILT;   // -MAX..MAX
+                        const rotateX = -(py - 0.5) * 2 * MAX_TILT;
+
+                        card.style.transform =
+                            `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+                        // Блик следует за курсором
+                        card.style.setProperty('--mx', (px * 100) + '%');
+                        card.style.setProperty('--my', (py * 100) + '%');
+                    });
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+                // сбрасываем блик в центр
+                card.style.setProperty('--mx', '50%');
+                card.style.setProperty('--my', '50%');
+            });
+        });
+    }
+
+    /* -----------------------------------------------------------
+       3. КУРСОР-ШЛЕЙФ (только ПК)
+       ----------------------------------------------------------- */
+    if (isPC && !reduceMotion) {
+        const canvas = document.createElement('canvas');
+        canvas.id = 'trailCanvas';
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        const particles = [];
+        const MAX_PARTICLES = 40;
+        const PALETTE_GOLD = ['#ffcc00', '#ff8c00', '#fff3e0', '#d97736'];
+
+        // Цвета зависят от темы
+        function getPalette() {
+            const t = document.documentElement.getAttribute('data-theme') || 'gold';
+            if (t === 'ice')     return ['#7dd3fc', '#38bdf8', '#e0f2fe', '#0ea5e9'];
+            if (t === 'classic') return ['#ff4545', '#16a34a', '#ffe0e0', '#dc2626'];
+            if (t === 'terminal')return ['#00ff66', '#00cc44', '#aaffaa', '#88ff88'];
+            return PALETTE_GOLD;
+        }
+
+        let lastX = null, lastY = null;
+        let mouseVX = 0, mouseVY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            if (lastX !== null) {
+                mouseVX = e.clientX - lastX;
+                mouseVY = e.clientY - lastY;
+            }
+            lastX = e.clientX;
+            lastY = e.clientY;
+
+            // Спавним частицы пропорционально скорости движения
+            const speed = Math.hypot(mouseVX, mouseVY);
+            const spawnCount = Math.min(3, 1 + Math.floor(speed / 15));
+
+            for (let i = 0; i < spawnCount; i++) {
+                const palette = getPalette();
+                particles.push({
+                    x: e.clientX + (Math.random() - 0.5) * 12,
+                    y: e.clientY + (Math.random() - 0.5) * 12,
+                    vx: -mouseVX * 0.15 + (Math.random() - 0.5) * 1.2,
+                    vy: -mouseVY * 0.15 + (Math.random() - 0.5) * 1.2 + 0.3,
+                    life: 1,
+                    decay: 0.018 + Math.random() * 0.012,
+                    size: 1.5 + Math.random() * 2.5,
+                    color: palette[Math.floor(Math.random() * palette.length)]
+                });
+            }
+
+            if (particles.length > MAX_PARTICLES) {
+                particles.splice(0, particles.length - MAX_PARTICLES);
+            }
+        });
+
+        function drawTrail() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.04;       // лёгкая гравитация
+                p.vx *= 0.97;
+                p.vy *= 0.97;
+                p.life -= p.decay;
+
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 8;
+                ctx.fill();
+            }
+
+            ctx.globalAlpha = 1;
+            ctx.shadowBlur = 0;
+            requestAnimationFrame(drawTrail);
+        }
+        drawTrail();
+    }
+
+    /* -----------------------------------------------------------
+       4. РИППЛ-ЭФФЕКТ (все устройства)
+       ----------------------------------------------------------- */
+    function addRipple(e) {
+        const target = e.currentTarget;
+        const rect = target.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = (e.clientX || (e.touches && e.touches[0].clientX) || rect.left + rect.width / 2) - rect.left;
+        const y = (e.clientY || (e.touches && e.touches[0].clientY) || rect.top + rect.height / 2) - rect.top;
+
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (x - size / 2) + 'px';
+        ripple.style.top = (y - size / 2) + 'px';
+
+        target.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 650);
+    }
+
+    // Вешаем риппл на все «кликабельные» элементы
+    const RIPPLE_SELECTOR = [
+        '.btn',
+        'button:not(.theme-btn):not(.sound-toggle)',
+        '.bingo-cell',
+        '.holiday-item',
+        '.ornament'
+    ].join(', ');
+
+    function initRipple() {
+        document.querySelectorAll(RIPPLE_SELECTOR).forEach(el => {
+            if (el.dataset.rippleInit) return;
+            el.dataset.rippleInit = '1';
+            el.classList.add('ripple-host');
+            el.addEventListener('click', addRipple);
+        });
+    }
+    // Инициализация + повторная (элементы создаются динамически)
+    initRipple();
+    // Наблюдаем за DOM, чтобы навешивать риппл на новые кнопки
+    const rippleObserver = new MutationObserver(() => initRipple());
+    rippleObserver.observe(document.body, { childList: true, subtree: true });
+
+})();
