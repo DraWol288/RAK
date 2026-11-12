@@ -737,6 +737,8 @@ if (isPC) {
 
         const MAX_TILT = 6;
 
+        // Исключаем ёлку из наклона
+document.querySelectorAll('#treeContainer').forEach(el => el.classList.remove('tilt-card'));
         document.querySelectorAll(TILT_SELECTOR).forEach(card => {
             card.classList.add('tilt-card');
 
