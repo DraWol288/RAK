@@ -1369,3 +1369,195 @@ textarea:focus-visible,
 
 /* --- 12. Общий user-select для игровых элементов (все устройства) --- */
 .bingo-cell, .holiday-item, .ornament { user-select: none; }
+
+/* ============================================================
+   === ДОБАВЛЕНО: ВИЗУАЛЬНЫЕ УЛУЧШЕНИЯ ===
+   1. Неоновое свечение за курсором
+   2. 3D-наклон карточек
+   3. Анимированный градиент заголовка
+   4. Курсор-шлейф (canvas)
+   5. Риппл-эффект на кнопках
+   ============================================================ */
+
+/* --- 1. Неоновое свечение за курсором (только ПК) --- */
+@media (min-width: 769px) {
+    #cursorGlow {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 1;
+        background: radial-gradient(
+            circle,
+            rgba(255, 204, 0, 0.13) 0%,
+            rgba(255, 140, 0, 0.08) 30%,
+            rgba(217, 119, 54, 0.03) 55%,
+            transparent 70%
+        );
+        transform: translate(-50%, -50%);
+        transition: opacity 0.4s ease;
+        opacity: 0;
+        mix-blend-mode: screen;
+        will-change: transform;
+    }
+    #cursorGlow.active { opacity: 1; }
+
+    /* В темах меняем цвет свечения */
+    [data-theme="ice"] #cursorGlow {
+        background: radial-gradient(circle,
+            rgba(125, 211, 252, 0.15) 0%,
+            rgba(56, 189, 248, 0.08) 30%,
+            rgba(14, 165, 233, 0.03) 55%,
+            transparent 70%);
+    }
+    [data-theme="classic"] #cursorGlow {
+        background: radial-gradient(circle,
+            rgba(255, 69, 69, 0.13) 0%,
+            rgba(22, 163, 74, 0.08) 40%,
+            transparent 70%);
+    }
+    [data-theme="terminal"] #cursorGlow {
+        background: radial-gradient(circle,
+            rgba(0, 255, 102, 0.15) 0%,
+            rgba(0, 204, 68, 0.08) 40%,
+            transparent 70%);
+    }
+}
+
+/* --- 2. 3D-наклон карточек (только ПК) --- */
+@media (min-width: 769px) {
+    .tilt-card {
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+        will-change: transform;
+        /* чтобы не дёргалось при мелких движениях */
+        perspective: 1000px;
+    }
+    .tilt-card:hover {
+        box-shadow: 0 15px 40px rgba(255, 140, 0, 0.25),
+                    0 0 25px rgba(255, 204, 0, 0.15),
+                    inset 0 0 15px rgba(255, 204, 0, 0.05);
+        z-index: 5;
+    }
+    /* Блик, следующий за курсором по карточке */
+    .tilt-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(
+            circle at var(--mx, 50%) var(--my, 50%),
+            rgba(255, 230, 150, 0.12),
+            transparent 50%
+        );
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        z-index: 1;
+    }
+    .tilt-card:hover::before { opacity: 1; }
+
+    /* Внутренний контент не «плющится» */
+    .tilt-card > * {
+        transform: translateZ(20px);
+    }
+}
+
+/* --- 3. Анимированный градиент заголовка H1 (все устройства) --- */
+@keyframes gradientShift {
+    0%   { background-position:   0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position:   0% 50%; }
+}
+
+h1 {
+    background: linear-gradient(
+        90deg,
+        var(--neon-gold),
+        var(--neon-amber),
+        var(--neon-cream),
+        var(--neon-copper),
+        var(--neon-gold)
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: gradientShift 6s ease infinite;
+    /* Тень переезжает в filter: drop-shadow, т.к. text-shadow не виден под градиентом */
+    text-shadow: none;
+    filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.55))
+            drop-shadow(0 0 18px rgba(255, 140, 0, 0.3));
+}
+
+/* Для тёмной темы «Терминал» — свой градиент */
+[data-theme="terminal"] h1 {
+    background: linear-gradient(90deg, #00ff66, #88ff88, #00cc44, #00ff66);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 102, 0.7));
+}
+
+/* h2 — тоже лёгкое мерцание (мягче) */
+h2 {
+    background: linear-gradient(90deg, var(--neon-gold), var(--neon-amber), var(--neon-gold));
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 8s ease infinite;
+}
+
+/* --- 4. Курсор-шлейф --- */
+#trailCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 40;
+    /* не перекрывает клики */
+}
+
+/* --- 5. Риппл-эффект --- */
+.ripple-host {
+    position: relative;
+    overflow: hidden;
+    /* чтобы риппл не вылезал */
+}
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: rippleAnim 0.6s ease-out;
+    background: radial-gradient(circle, rgba(255, 230, 150, 0.55), rgba(255, 204, 0, 0.15));
+    pointer-events: none;
+    z-index: 0;
+}
+[data-theme="ice"] .ripple { background: radial-gradient(circle, rgba(125, 211, 252, 0.6), rgba(56, 189, 248, 0.15)); }
+[data-theme="classic"] .ripple { background: radial-gradient(circle, rgba(255, 100, 100, 0.6), rgba(22, 163, 74, 0.2)); }
+[data-theme="terminal"] .ripple { background: radial-gradient(circle, rgba(0, 255, 102, 0.55), rgba(0, 204, 68, 0.15)); }
+
+@keyframes rippleAnim {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* --- Отключаем всё для prefers-reduced-motion --- */
+@media (prefers-reduced-motion: reduce) {
+    #cursorGlow,
+    #trailCanvas { display: none !important; }
+    .tilt-card { transform: none !important; }
+    h1, h2 { animation: none !important; }
+    .ripple { display: none !important; }
+}
