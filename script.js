@@ -459,12 +459,28 @@ if (isPC) {
         const playAchievement = () => { playTone(659.25,0.12); setTimeout(()=>playTone(783.99,0.12),100); setTimeout(()=>playTone(1046.5,0.25),200); };
         const playDice = () => playTone(440, 0.06, 'triangle', 0.06);
 
-        const soundBtn = document.getElementById('soundToggle');
+               const soundBtn = document.getElementById('soundToggle');
+        const customSound = document.getElementById('myCustomSound'); // Наш аудио-тег
+        
         if (soundBtn) {
             soundBtn.addEventListener('click', () => {
                 soundEnabled = !soundEnabled;
                 soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
                 soundBtn.style.opacity = soundEnabled ? '1' : '0.5';
+                
+                // Управляем вашим аудиофайлом
+                if (customSound) {
+                    if (soundEnabled) {
+                        // Включаем музыку
+                        customSound.play().catch(error => {
+                            console.log("Не удалось воспроизвести звук:", error);
+                        });
+                    } else {
+                        // Выключаем музыку
+                        customSound.pause();
+                    }
+                }
+                
                 if (soundEnabled) playClick();
             });
         }
